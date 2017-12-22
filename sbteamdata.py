@@ -12,36 +12,51 @@ class Team:
 
 class Player:
 
-    def __init__(self, Name, Position, Games, AB, Hits,
-                 Avg, Singles, Doubles, Triples, HR, RBI, SO, ERA):
-        self.Name = Name
-        self.Position = Position
-        self.Games = Games
-        self.AB = AB
-        self.Hits = Hits
-        self.Avg = Avg
-        self.Singles = Singles
-        self.Doubles = Doubles
-        self.Triples = Triples
-        self.HR = HR
-        self.RBI = RBI
-        self.SO = SO
-        self.ERA = ERA
+    def __init__(self, name, position, games, ab, hits,
+                 avg, singles, doubles, triples, hr, rbi, so, era, slg=0):
+        self.name = name
+        self.position = position
+        self.games = games
+        self.ab = ab
+        self.hits = hits
+        self.avg = avg
+        self.singles = singles
+        self.doubles = doubles
+        self.triples = triples
+        self.hr = hr
+        self.rbi = rbi
+        self.so = so
+        self.era = era
+        self.slg = slg
 
-    def get_player_data(self):
-        return (self.Name,
-                self.Position,
-                self.Games,
-                self.AB,
-                self.Hits,
-                self.Avg,
-                self.Singles,
-                self.Doubles,
-                self.Triples,
-                self.HR,
-                self.RBI,
-                self.SO,
-                self.ERA)
+    def __str__(self):
+        return str(self.name + " " +
+                   self.position + " " +
+                   self.games + " " +
+                   self.ab + " " +
+                   self.hits + " " +
+                   self.avg + " " +
+                   self.singles + " " +
+                   self.doubles + " " +
+                   self.triples + " " +
+                   self.hr + " " +
+                   self.rbi + " " +
+                   self.so + " " +
+                   self.era + " " +
+                   self.slg)
+
+    def compute_slg(self):
+
+        totalbases = int(self.singles) + (int(self.doubles)*2) + (int(self.triples)*3) + (int(self.hr)*4)
+
+        if self.ab == "0":
+            slg = 0
+        else:
+            slg = (totalbases / int(self.ab))
+            slg = format(slg, '.3f')
+            if slg[0] == "0":
+                slg = slg[1:]
+        return str(slg)
 
 def get_team_data(tid):
 
@@ -82,6 +97,19 @@ def get_team_data(tid):
                         out[11].lstrip(),
                         out[12])
 
+        player.slg = player.compute_slg()
+
         myteam.add_player(player)
 
     return myteam
+
+def get_team_stats(tid):
+
+    myteam = get_team_data(tid)
+
+    teamstats = []
+
+    for entry in myteam.players:
+        teamstats.append(str(entry))
+
+    return teamstats
