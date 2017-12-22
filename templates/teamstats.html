@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+    <h2>{{ myteamname }}</h2>
+
+    <ol>
+        {% for stat in stats %}
+            <li>{{ stat }}</li>
+        {% endfor %}
+    </ol>
+
+    <a href="/">Home</a>
+{% endblock %}

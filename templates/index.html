@@ -1,0 +1,14 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<h2>SmallBall Stats</h2>
+
+<p> Enter team ID:</p>
+
+<form action="/teamstats" method="POST">
+    <input name="text">
+    <input type="submit">
+</form>
+
+{% endblock %}
