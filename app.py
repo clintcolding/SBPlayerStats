@@ -9,7 +9,7 @@ def my_form():
 
 @app.route('/teamstats', methods=['POST'])
 def my_form_post():
-    tid = request.form['text']
+    tid = request.form['teamid']
 
     myteamname = (sbteamdata.get_team_data(tid)).name
     stats = sbteamdata.get_team_data(tid)
