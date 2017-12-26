@@ -2,9 +2,19 @@
     <head>
         <meta charset="utf-8">
         <title>SmallBallStats</title>
-        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway:400,300,600">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='normalize.css') }}">
+        <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='skeleton.css') }}">
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <header>
+            <div class="navbar">
+                <h3><a href="/">SmallBall Stats</a></h3>
+            </div>
+        </header>
+        <div class="container">
+            {% block body %}{% endblock %}
+        </div>
     </body>
 </html>
