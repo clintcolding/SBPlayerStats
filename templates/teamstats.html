@@ -5,23 +5,24 @@
 
     <h5>Batting</h5>
 
-    <table>
-        <!-- <thead>Batting</thead> -->
-        <tr>
-            <th>Player</th>
-            <th>Pos</th>
-            <th>G</th>
-            <th>AB</th>
-            <th>H</th>
-            <th>1B</th>
-            <th>2B</th>
-            <th>3B</th>
-            <th>HR</th>
-            <th>RBI</th>
-            <th>Avg</th>
-            <th>SLG</th>
-        </tr>
-        
+    <table id="batting" class="display">
+        <thead>    
+            <tr>
+                <th>Player</th>
+                <th>Pos</th>
+                <th>G</th>
+                <th>AB</th>
+                <th>H</th>
+                <th>1B</th>
+                <th>2B</th>
+                <th>3B</th>
+                <th>HR</th>
+                <th>RBI</th>
+                <th>Avg</th>
+                <th>SLG</th>
+            </tr>
+        </thead>
+        <tbody>
         {% for entry in stats.players %}
             <tr>
                 <td>{{ entry.name }}</td>
@@ -38,17 +39,20 @@
                 <td>{{ entry.slg }}</td>
             </tr>
         {% endfor %}
-
+        </tbody>
     </table>
 
-    <h5>Pitching</h5>
-        <table>
-            <tr>
-                <th>Player</th>
-                <th>G</th>
-                <th>SO</th>
-                <th>ERA</th>
-            </tr>
+    <h5 class="pitching">Pitching</h5>
+        <table id="pitching" class="display">
+            <thead>
+                <tr>
+                    <th>Player</th>
+                    <th>G</th>
+                    <th>SO</th>
+                    <th>ERA</th>
+                </tr>
+            </thead>
+            <tbody>
             {% for entry in pitchers %}
             <tr>
                 <td>{{ entry.name }}</td>
@@ -57,5 +61,6 @@
                 <td>{{ entry.era }}</td>
             </tr>    
             {% endfor %}
+            </tbody>
         </table>
 {% endblock %}
