@@ -4,11 +4,60 @@
 
     <h2>{{ myteamname }}</h2>
 
-    <ol>
-        {% for stat in stats %}
-            <li>{{ stat }}</li>
+    <h3>Batting</h3>
+
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Position</th>
+            <th>Games</th>
+            <th>AB</th>
+            <th>Hits</th>
+            <th>Avg</th>
+            <th>1B</th>
+            <th>2B</th>
+            <th>3B</th>
+            <th>HR</th>
+            <th>RBI</th>
+            <th>SLG</th>
+        </tr>
+        
+        {% for entry in stats.players %}
+            <tr>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.position }}</td>
+                <td>{{ entry.games }}</td>
+                <td>{{ entry.ab }}</td>
+                <td>{{ entry.hits }}</td>
+                <td>{{ entry.avg }}</td>
+                <td>{{ entry.singles }}</td>
+                <td>{{ entry.doubles }}</td>
+                <td>{{ entry.triples }}</td>
+                <td>{{ entry.hr }}</td>
+                <td>{{ entry.rbi }}</td>
+                <td>{{ entry.slg }}</td>
+            </tr>
         {% endfor %}
-    </ol>
+
+    </table>
+
+    <h3>Pitching</h3>
+        <table>
+            <tr>
+                <th>Name</th>
+                <th>Games</th>
+                <th>SO</th>
+                <th>ERA</th>
+            </tr>
+            {% for entry in pitchers %}
+            <tr>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.games }}</td>
+                <td>{{ entry.so }}</td>
+                <td>{{ entry.era }}</td>
+            </tr>    
+            {% endfor %}
+        </table>
 
     <a href="/">Home</a>
 {% endblock %}
