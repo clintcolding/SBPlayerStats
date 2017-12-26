@@ -2,13 +2,18 @@
 
 {% block body %}
 
-<center>
-    <form action="/teamstats" method="POST">
-        <div class="row">
-            <input class="u-center" name="teamid" placeholder="Team Link ID">
-        </div>
-        <input class="button-primary" type="submit" value="Submit">
-    </form>
-</center>
+<div class="container">
+    <center>
+        <form action="/teamstats" method="POST">
+            <div class="row">
+                <input class="u-center" name="teamid" placeholder="Team Link ID">
+            </div>
+            <input class="button-primary" type="submit" value="Submit">
+        </form>
+        
+        <h5>Lookup any team using the ID found in the team page URL!</h5>
 
+        <img class="index-img" src="{{url_for('static', filename='images/howto.png') }}">
+    </center>
+</div>
 {% endblock %}
