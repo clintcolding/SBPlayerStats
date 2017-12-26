@@ -12,8 +12,9 @@ class Team:
 
 class Player:
 
-    def __init__(self, name, position, games, ab, hits,
+    def __init__(self, id, name, position, games, ab, hits,
                  avg, singles, doubles, triples, hr, rbi, so, era, slg=0):
+        self.id = id
         self.name = name
         self.position = position
         self.games = games
@@ -30,7 +31,8 @@ class Player:
         self.slg = slg
 
     def __str__(self):
-        return str(self.name + " " +
+        return str(self.id + " " +
+                   self.name + " " +
                    self.position + " " +
                    self.games + " " +
                    self.ab + " " +
@@ -43,6 +45,22 @@ class Player:
                    self.rbi + " " +
                    self.so + " " +
                    self.era + " " +
+                   self.slg)
+
+    def __getitem__(self, name):
+        return str(self.name,
+                   self.position,
+                   self.games,
+                   self.ab,
+                   self.hits,
+                   self.avg,
+                   self.singles,
+                   self.doubles,
+                   self.triples,
+                   self.hr,
+                   self.rbi,
+                   self.so,
+                   self.era,
                    self.slg)
 
     def compute_slg(self):
@@ -78,12 +96,14 @@ def get_team_data(tid):
 
     # Store data in objects
     myteam = Team(team_name)
+    id = 1
 
     for name in players:
         rawstats = (team.find("td", string=name)).parent
         out = (rawstats.text.strip()).splitlines()
 
-        player = Player(name,
+        player = Player(str(id),
+                        name,
                         out[1],
                         out[2].lstrip(),
                         out[3].lstrip(),
@@ -101,6 +121,8 @@ def get_team_data(tid):
 
         myteam.add_player(player)
 
+        id += 1
+
     return myteam
 
 def get_team_stats(tid):
@@ -113,3 +135,21 @@ def get_team_stats(tid):
         teamstats.append(str(entry))
 
     return teamstats
+
+def get_player_stats(tid):
+
+    myteam = get_team_data(tid)
+
+    for player in myteam.players:
+        return player.name, player.position
+
+def get_pitchers(tid):
+
+    myteam = get_team_data(tid)
+    pitchers = []
+
+    for player in myteam.players:
+        if player.era is not "-":
+            pitchers.append(player)
+
+    return pitchers
