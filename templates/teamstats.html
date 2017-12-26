@@ -1,24 +1,24 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-
     <h2>{{ myteamname }}</h2>
 
-    <h3>Batting</h3>
+    <h5>Batting</h5>
 
     <table>
+        <!-- <thead>Batting</thead> -->
         <tr>
-            <th>Name</th>
-            <th>Position</th>
-            <th>Games</th>
+            <th>Player</th>
+            <th>Pos</th>
+            <th>G</th>
             <th>AB</th>
-            <th>Hits</th>
-            <th>Avg</th>
+            <th>H</th>
             <th>1B</th>
             <th>2B</th>
             <th>3B</th>
             <th>HR</th>
             <th>RBI</th>
+            <th>Avg</th>
             <th>SLG</th>
         </tr>
         
@@ -29,23 +29,23 @@
                 <td>{{ entry.games }}</td>
                 <td>{{ entry.ab }}</td>
                 <td>{{ entry.hits }}</td>
-                <td>{{ entry.avg }}</td>
                 <td>{{ entry.singles }}</td>
                 <td>{{ entry.doubles }}</td>
                 <td>{{ entry.triples }}</td>
                 <td>{{ entry.hr }}</td>
                 <td>{{ entry.rbi }}</td>
+                <td>{{ entry.avg }}</td>
                 <td>{{ entry.slg }}</td>
             </tr>
         {% endfor %}
 
     </table>
 
-    <h3>Pitching</h3>
+    <h5>Pitching</h5>
         <table>
             <tr>
-                <th>Name</th>
-                <th>Games</th>
+                <th>Player</th>
+                <th>G</th>
                 <th>SO</th>
                 <th>ERA</th>
             </tr>
@@ -58,6 +58,4 @@
             </tr>    
             {% endfor %}
         </table>
-
-    <a href="/">Home</a>
 {% endblock %}
