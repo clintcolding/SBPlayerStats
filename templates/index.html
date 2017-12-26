@@ -2,13 +2,13 @@
 
 {% block body %}
 
-<h2>SmallBall Stats</h2>
-
-<p> Enter team ID:</p>
-
-<form action="/teamstats" method="POST">
-    <input name="text">
-    <input type="submit">
-</form>
+<center>
+    <form action="/teamstats" method="POST">
+        <div class="row">
+            <input class="u-center" name="teamid" placeholder="Team Link ID">
+        </div>
+        <input class="button-primary" type="submit" value="Submit">
+    </form>
+</center>
 
 {% endblock %}
