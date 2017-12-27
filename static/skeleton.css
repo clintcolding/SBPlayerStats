@@ -467,6 +467,24 @@ there.
   color: #bbb;
 }
 
+/* DataTables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+table.dataTable thead th{
+  padding: 10px 12px;
+}
+
+table.dataTable tfoot th{
+  padding: 10px 10px 6px 10px;
+}
+
+table.dataTable thead th.sorting,
+table.dataTable thead th.sorting_asc,
+table.dataTable thead th.sorting_desc {
+  background: none;
+  padding: 8px 10px;
+}
+
 /* Custom
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
@@ -476,12 +494,4 @@ there.
 
 .pitching {
   margin-top: 3rem;
-}
-
-table.dataTable thead th{
-  padding: 10px 12px;
-}
-
-table.dataTable tfoot th{
-  padding: 10px 10px 6px 10px;
 }
