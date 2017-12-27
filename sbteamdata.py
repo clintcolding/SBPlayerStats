@@ -1,4 +1,4 @@
-from urllib.request import urlopen
+from urllib import request, parse
 from bs4 import BeautifulSoup
 
 class Team:
@@ -78,10 +78,15 @@ class Player:
 
 def get_team_data(tid):
 
-    # Scape and parse the page
-    team_page = 'http://smallball.com/go/on.ball.team?tid={0}'.format(tid)
-    page = urlopen(team_page)
-    soup = BeautifulSoup(page, 'html.parser')
+    # Post to SB search page
+
+    search_data = {"oid": tid, "Search": "search"}
+    search_url = "http://smallball.com/go/on.ball.team"
+    data = parse.urlencode(search_data).encode()
+    response = request.urlopen(search_url, data)
+
+    # Parse html from post repsonse
+    soup = BeautifulSoup(response, 'html.parser')
 
     # Get team name
     team_name = soup.find('td', attrs={'class': 'table_top_name'})
