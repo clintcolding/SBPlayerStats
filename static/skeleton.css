@@ -451,3 +451,11 @@ there.
 .pitching {
   margin-top: 3rem;
 }
+
+table.dataTable thead th{
+  padding: 10px 12px;
+}
+
+table.dataTable tfoot th{
+  padding: 10px 10px 6px 10px;
+}
