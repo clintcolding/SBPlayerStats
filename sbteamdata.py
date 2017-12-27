@@ -6,9 +6,82 @@ class Team:
     def __init__(self, name):
         self.name = name
         self.players = []
+        self.games = 0
+        self.ab = 0
+        self.hits = 0
+        self.avg = 0
+        self.singles = 0
+        self.doubles = 0
+        self.triples = 0
+        self.hr = 0
+        self.rbi = 0
+        self.so = 0
+        self.era = 0
+        self.slg = 0
 
     def add_player(self, player):
         self.players.append(player)
+
+    def get_team_stats(self):
+        active_players = 12
+        pitcher_count = 0
+        games = 0
+        ab = 0
+        hits = 0
+        singles = 0
+        doubles = 0
+        triples = 0
+        hr = 0
+        rbi = 0
+        avg = 0
+        slg = 0
+        so = 0
+        era = 0
+
+        for player in self.players:
+            if int(player.games) > int(games):
+                games = player.games
+            if player.games == "0":
+                active_players = active_players - 1
+            if "-" not in player.era:
+                era = era + float(player.era)
+                pitcher_count += 1
+            ab += int(player.ab)
+            hits += int(player.hits)
+            singles += int(player.singles)
+            doubles += int(player.doubles)
+            triples += int(player.triples)
+            hr += int(player.hr)
+            rbi += int(player.rbi)
+            so += int(player.so)
+            avg += float(player.avg)
+            slg += float(player.slg)
+
+        team_era = era / pitcher_count
+        team_era = format(team_era, '.2f')
+
+        team_avg = avg / active_players
+        team_avg = format(team_avg, '.3f')
+        if team_avg[0] == "0":
+            team_avg = team_avg[1:]
+
+        team_slg = slg / active_players
+        team_slg = format(team_slg, '.3f')
+        if team_slg[0] == "0":
+            team_slg = team_slg[1:]
+
+        self.games = games
+        self.ab = ab
+        self.hits = hits
+        self.avg = team_avg
+        self.singles = singles
+        self.doubles = doubles
+        self.triples = triples
+        self.hr = hr
+        self.rbi = rbi
+        self.so = so
+        self.era = team_era
+        self.slg = team_slg
 
 class Player:
 
@@ -128,25 +201,9 @@ def get_team_data(tid):
 
         id += 1
 
+    myteam.get_team_stats()
+
     return myteam
-
-def get_team_stats(tid):
-
-    myteam = get_team_data(tid)
-
-    teamstats = []
-
-    for entry in myteam.players:
-        teamstats.append(str(entry))
-
-    return teamstats
-
-def get_player_stats(tid):
-
-    myteam = get_team_data(tid)
-
-    for player in myteam.players:
-        return player.name, player.position
 
 def get_pitchers(tid):
 
@@ -154,7 +211,7 @@ def get_pitchers(tid):
     pitchers = []
 
     for player in myteam.players:
-        if player.era is not "-":
+        if "-" not in player.era:
             pitchers.append(player)
 
     return pitchers
