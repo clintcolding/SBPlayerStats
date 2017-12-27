@@ -213,5 +213,7 @@ def get_pitchers(tid):
     for player in myteam.players:
         if "-" not in player.era:
             pitchers.append(player)
+        elif player.so is not "0":
+            pitchers.append(player)
 
     return pitchers
