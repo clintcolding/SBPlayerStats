@@ -22,6 +22,22 @@
                 <th>SLG</th>
             </tr>
         </thead>
+        <tfoot>
+            <tr>
+                <th>Total</th>
+                <th></th>
+                <th>{{ stats.games }}</th>
+                <th>{{ stats.ab }}</th>
+                <th>{{ stats.hits }}</th>
+                <th>{{ stats.singles }}</th>
+                <th>{{ stats.doubles }}</th>
+                <th>{{ stats.triples }}</th>
+                <th>{{ stats.hr }}</th>
+                <th>{{ stats.rbi }}</th>
+                <th>{{ stats.avg }}</th>
+                <th>{{ stats.slg }}</th>
+            </tr>
+        </tfoot>
         <tbody>
         {% for entry in stats.players %}
             <tr>
@@ -38,7 +54,7 @@
                 <td>{{ entry.avg }}</td>
                 <td>{{ entry.slg }}</td>
             </tr>
-        {% endfor %}
+        {% endfor %} 
         </tbody>
     </table>
 
@@ -52,6 +68,14 @@
                     <th>ERA</th>
                 </tr>
             </thead>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>{{ stats.games }}</th>
+                    <th>{{ stats.so }}</th>
+                    <th>{{ stats.era }}</th>
+                </tr>
+            </tfoot>
             <tbody>
             {% for entry in pitchers %}
             <tr>
