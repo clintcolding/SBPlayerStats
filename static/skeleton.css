@@ -497,3 +497,7 @@ table.dataTable tfoot th{
 .pitching {
   margin-top: 3rem;
 }
+
+.team-info {
+  text-align: right;
+}
