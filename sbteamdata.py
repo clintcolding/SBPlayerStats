@@ -5,6 +5,9 @@ class Team:
 
     def __init__(self, name):
         self.name = name
+        self.tid = 0
+        self.stars = 0
+        self.trained = 0
         self.players = []
         self.games = 0
         self.ab = 0
@@ -152,7 +155,6 @@ class Player:
 def get_team_data(tid):
 
     # Post to SB search page
-
     search_data = {"oid": tid, "Search": "search"}
     search_url = "http://smallball.com/go/on.ball.team"
     data = parse.urlencode(search_data).encode()
@@ -164,6 +166,19 @@ def get_team_data(tid):
     # Get team name
     team_name = soup.find('td', attrs={'class': 'table_top_name'})
     team_name = team_name.text.strip()
+
+    # Get team id
+    team_id = soup.find('td', attrs={'class': 'table_top_id'})
+    team_id = team_id.text.strip()
+    team_id = team_id[5:]
+
+    # Get team star level and last trained
+
+    team_star = soup.find('td', attrs={'class': 'table_top_2'})
+    team_star_level = team_star.find('img')['src']
+    team_star_level = team_star_level[18:]
+    team_star_level = team_star_level[:-4]
+    team_last_trained = (team_star.text.strip()).title()
 
     # Get a list of player names
     team = soup.find('table', attrs={'class': 'table_team_text'})
@@ -202,6 +217,9 @@ def get_team_data(tid):
         id += 1
 
     myteam.get_team_stats()
+    myteam.tid = team_id
+    myteam.stars = int(team_star_level)
+    myteam.trained = team_last_trained
 
     return myteam
 
