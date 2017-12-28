@@ -1,8 +1,21 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-    <h2>{{ myteamname }}</h2>
-
+    <div class="row">
+        <div class="seven columns">
+                <h2>{{ myteamname }}</h2>
+        </div>
+        <div class="five colums">
+            <div class="team-info"><strong>{{ stats.tid }}</strong></div>
+            <div class="team-info">
+                {% for i in range(stats.stars) %}
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                {% endfor %}
+            </div>
+            <div class="team-info">{{ stats.trained }}</div>
+        </div>
+    </div>
+    
     <h5>Batting</h5>
 
     <table id="batting" class="display" width="100%">
@@ -58,33 +71,56 @@
         </tbody>
     </table>
 
-    <h5 class="pitching">Pitching</h5>
-        <table id="pitching" class="display" width="100%">
-            <thead>
+    <div class="row">
+        <div class="seven columns">
+            <h5 class="pitching">Pitching</h5>
+            <table id="pitching" class="display" width="100%">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>G</th>
+                        <th>SO</th>
+                        <th>ERA</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th>{{ stats.games }}</th>
+                        <th>{{ stats.so }}</th>
+                        <th>{{ stats.era }}</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                {% for entry in pitchers %}
                 <tr>
-                    <th>Player</th>
-                    <th>G</th>
-                    <th>SO</th>
-                    <th>ERA</th>
-                </tr>
-            </thead>
-            <tfoot>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.games }}</td>
+                    <td>{{ entry.so }}</td>
+                    <td>{{ entry.era }}</td>
+                </tr>    
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <div class="five columns">
+            <h5 class="pitching">Team</h5>
+            <table id="team" class="display" width="100%">
+                <thead>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>PCT</th>
+                    <th>RS</th>
+                    <th>RA</th>
+                </thead>
                 <tr>
-                    <th>Total</th>
-                    <th>{{ stats.games }}</th>
-                    <th>{{ stats.so }}</th>
-                    <th>{{ stats.era }}</th>
+                    <td>{{ stats.wins }}</td>
+                    <td>{{ stats.losses }}</td>
+                    <td>{{ stats.pct }}</td>
+                    <td>{{ stats.rs }}</td>
+                    <td>{{ stats.ra }}</td>
                 </tr>
-            </tfoot>
-            <tbody>
-            {% for entry in pitchers %}
-            <tr>
-                <td>{{ entry.name }}</td>
-                <td>{{ entry.games }}</td>
-                <td>{{ entry.so }}</td>
-                <td>{{ entry.era }}</td>
-            </tr>    
-            {% endfor %}
-            </tbody>
-        </table>
+            </table>
+        </div>
+    </div>
 {% endblock %}

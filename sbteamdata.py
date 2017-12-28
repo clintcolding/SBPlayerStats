@@ -8,6 +8,11 @@ class Team:
         self.tid = 0
         self.stars = 0
         self.trained = 0
+        self.wins = 0
+        self.losses = 0
+        self.pct = 0
+        self.rs = 0
+        self.ra = 0
         self.players = []
         self.games = 0
         self.ab = 0
@@ -180,6 +185,51 @@ def get_team_data(tid):
     team_star_level = team_star_level[:-4]
     team_last_trained = (team_star.text.strip()).title()
 
+    # Get wins/losses and runs scored/against
+    game_data = soup.find_all('td', attrs={'class': 'recent_text_right'})
+
+    game_score = []
+    game_result = []
+    count = 0
+    game_wins = 0
+    game_losses = 0
+    game_runs_for = 0
+    game_runs_against = 0
+
+    for entry in game_data:
+        if 'width="10%"' in str(entry) and '?' not in str(entry):
+            game_result.append(entry.text.strip())
+        if 'width="13%"' in str(entry) and 'n/a' not in str(entry):
+            game_score.append(entry.text.strip())
+
+    for i in game_result:
+        score_split = game_score[count].split(":")
+        if i == "W":
+            game_wins += 1
+            if int(score_split[0]) > int(score_split[1]):
+                game_runs_for += int(score_split[0])
+                game_runs_against += int(score_split[1])
+            else:
+                game_runs_for += int(score_split[1])
+                game_runs_against += int(score_split[0])
+        if i == "L":
+            game_losses += 1
+            if int(score_split[0]) < int(score_split[1]):
+                game_runs_for += int(score_split[0])
+                game_runs_against += int(score_split[1])
+            else:
+                game_runs_for += int(score_split[1])
+                game_runs_against += int(score_split[0])
+        count += 1
+
+    # Calculate pct
+
+    game_pct = int(game_wins) / (int(game_wins) + int(game_losses))
+    game_pct = format(game_pct, '.3f')
+
+    if game_pct[0] == "0":
+        game_pct = game_pct[1:]
+
     # Get a list of player names
     team = soup.find('table', attrs={'class': 'table_team_text'})
     data = team.find_all('td', 'table_team_name')
@@ -220,6 +270,11 @@ def get_team_data(tid):
     myteam.tid = team_id
     myteam.stars = int(team_star_level)
     myteam.trained = team_last_trained
+    myteam.wins = game_wins
+    myteam.losses = game_losses
+    myteam.pct = game_pct
+    myteam.rs = game_runs_for
+    myteam.ra = game_runs_against
 
     return myteam
 
