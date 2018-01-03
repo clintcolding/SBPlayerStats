@@ -65,18 +65,25 @@ class Team:
             avg += float(player.avg)
             slg += float(player.slg)
 
-        team_era = era / pitcher_count
-        team_era = format(team_era, '.2f')
+        if int(pitcher_count) == 0:
+            team_era = "0"
+        else:
+            team_era = era / pitcher_count
+            team_era = format(team_era, '.2f')
 
-        team_avg = avg / active_players
-        team_avg = format(team_avg, '.3f')
-        if team_avg[0] == "0":
-            team_avg = team_avg[1:]
+        if int(active_players) == 0:
+            team_avg = ".000"
+            team_slg = "0"
+        else:
+            team_avg = avg / active_players
+            team_avg = format(team_avg, '.3f')
+            if team_avg[0] == "0":
+                team_avg = team_avg[1:]
 
-        team_slg = slg / active_players
-        team_slg = format(team_slg, '.3f')
-        if team_slg[0] == "0":
-            team_slg = team_slg[1:]
+            team_slg = slg / active_players
+            team_slg = format(team_slg, '.3f')
+            if team_slg[0] == "0":
+                team_slg = team_slg[1:]
 
         self.games = games
         self.ab = ab
@@ -224,11 +231,14 @@ def get_team_data(tid):
 
     # Calculate pct
 
-    game_pct = int(game_wins) / (int(game_wins) + int(game_losses))
-    game_pct = format(game_pct, '.3f')
+    if int(game_wins) == 0:
+        game_pct = "0"
+    else:
+        game_pct = int(game_wins) / (int(game_wins) + int(game_losses))
+        game_pct = format(game_pct, '.3f')
 
-    if game_pct[0] == "0":
-        game_pct = game_pct[1:]
+        if game_pct[0] == "0":
+            game_pct = game_pct[1:]
 
     # Get a list of player names
     team = soup.find('table', attrs={'class': 'table_team_text'})
