@@ -366,7 +366,7 @@ form {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .u-center {
   text-align: center;
-  width: 20%;
+  width: 30%;
   box-sizing: border-box; }
 .u-full-width {
   width: 100%;
@@ -492,4 +492,9 @@ table.dataTable tfoot th{
 
 .team-info {
   text-align: right;
+}
+
+.recent {
+  margin-bottom: 1rem;
+  text-decoration: none;
 }

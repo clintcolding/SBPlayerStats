@@ -9,6 +9,13 @@
             </div>
             <input class="button-primary" type="submit" value="Submit">
         </form>
+
+        <div class="row">
+            <h4>Recent Searches</h3>
+            {% for search in recent %}
+                <div class="row"><a class="recent" href="{{ "/stats/{0}".format(search.teamid) }}">{{ search.teamid }}</a></div>
+            {% endfor %}
+        </div>
     </center>
 
 {% endblock %}
