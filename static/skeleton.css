@@ -129,7 +129,7 @@ body {
   font-size: 1.5rem; /* currently ems cause chrome bug misinterpreting rems on body element */
   line-height: 1.6;
   font-weight: 400;
-  font-family: "Lato", sans-serif;
+  font-family: 'Open Sans', Georgia, Times, serif;
   color: #222; }
 
 
@@ -366,7 +366,7 @@ form {
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 .u-center {
   text-align: center;
-  width: 30%;
+  width: 100%;
   box-sizing: border-box; }
 .u-full-width {
   width: 100%;
@@ -429,11 +429,15 @@ there.
 /* Header
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
-.navbar {
-  padding-top: 2rem;
-  padding-bottom: .5rem;
-  text-align: center;
+.header {
   background: #333;
+}
+
+.navbar {
+  height: 2rem;
+  font-weight: 600;
+  margin-top: -1rem;
+  margin-bottom: 1rem;
   color: #E1E1E1;
 }
 
@@ -444,6 +448,34 @@ there.
 
 .navbar a:hover {
   color: #bbb;
+}
+
+.navbar-title {
+  font-size: 3rem;
+  position: relative;
+  float: left;
+}
+
+.navbar .li-right:not(:first-child) {
+  margin-left: 1rem;
+}
+
+.navbar .li-right {
+  position: relative;
+  float: right;
+  list-style: none;
+  text-transform: uppercase;
+}
+
+.navbar .li-left:not(:first-child) {
+  margin-left: 2rem;
+}
+
+.navbar .li-left {
+  position: relative;
+  float: left;
+  list-style: none;
+  text-transform: uppercase;
 }
 
 /* Footer
@@ -487,6 +519,35 @@ table.dataTable tfoot th{
   }
 }
 
+/* Tabs
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+ul.tabs{
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+ul.tabs li{
+  background: none;
+  color: #222;
+  display: inline-block;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+ul.tabs li.current{
+  font-weight: bold;
+}
+
+.tab-content{
+  display: none;
+  padding: 15px;
+}
+
+.tab-content.current{
+  display: inherit;
+}
+
 /* Custom
 –––––––––––––––––––––––––––––––––––––––––––––––––– */
 
@@ -497,4 +558,16 @@ table.dataTable tfoot th{
 .recent {
   margin-bottom: 1rem;
   text-decoration: none;
+}
+
+.search {
+  text-align: center;
+  width: 15rem;
+  box-sizing: border-box; 
+}
+
+img {
+  border-radius: 5px;
+  max-width: 100%;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
