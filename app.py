@@ -117,8 +117,9 @@ def stats(tid):
             db.session.delete(player)
             db.session.commit()
     for player in pitchers:
-        new_entry = Pitcher(tid, player.id, player.name, player.games, player.so, player.era)
-        db.session.add(new_entry)
+        if player.era != "-":
+            new_entry = Pitcher(tid, player.id, player.name, player.games, player.so, player.era)
+            db.session.add(new_entry)
     db.session.commit()
 
     return render_template('stats.html', myteamname=myteamname, stats=stats, pitchers=pitchers)
