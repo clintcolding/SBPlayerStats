@@ -16,10 +16,65 @@ class Recent(db.Model):
         self.teamid = teamid
         self.time = time
 
+class Player(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    teamid = db.Column(db.Integer)
+    playerid = db.Column(db.Integer)
+    name = db.Column(db.String)
+    position = db.Column(db.String)
+    games = db.Column(db.Integer)
+    ab = db.Column(db.Integer)
+    hits = db.Column(db.Integer)
+    avg = db.Column(db.String)
+    singles = db.Column(db.Integer)
+    doubles = db.Column(db.Integer)
+    triples = db.Column(db.Integer)
+    hr = db.Column(db.Integer)
+    rbi = db.Column(db.Integer)
+    so = db.Column(db.Integer)
+    era = db.Column(db.String)
+    slg = db.Column(db.String)
+
+    def __init__(self, teamid, playerid, name, position, games, ab, hits,
+                avg, singles, doubles, triples, hr, rbi, so, era, slg):
+        self.teamid = teamid
+        self.playerid = playerid
+        self.name = name
+        self.position = position
+        self.games = games
+        self.ab = ab
+        self.hits = hits
+        self.avg = avg
+        self.singles = singles
+        self.doubles = doubles
+        self.triples = triples
+        self.hr = hr
+        self.rbi = rbi
+        self.so = so
+        self.era = era
+        self.slg = slg
+
+class Pitcher(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    teamid = db.Column(db.Integer)
+    playerid = db.Column(db.Integer)
+    name = db.Column(db.String)
+    games = db.Column(db.Integer)
+    so = db.Column(db.Integer)
+    era = db.Column(db.String)
+
+    def __init__(self, teamid, playerid, name, games, so, era):
+        self.teamid = teamid
+        self.playerid = playerid
+        self.name = name
+        self.games = games
+        self.so = so
+        self.era = era
+
+
 @app.route('/')
 def index():
-    recent = Recent.query.order_by(Recent.time.desc()).limit(10)
-    return render_template('index.html', recent=recent)
+    return render_template('index.html')
 
 @app.route('/search', methods=['POST'])
 def search():
@@ -42,7 +97,38 @@ def stats(tid):
     stats = sbteamdata.get_team_data(tid)
     pitchers = sbteamdata.get_pitchers(tid)
 
+    players = Player.query.filter_by(teamid=tid).all()
+    p_players = Pitcher.query.filter_by(teamid=tid).all()
+
+    if players:
+        for player in players:
+            db.session.delete(player)
+            db.session.commit()
+
+    for player in stats.players:
+        new_entry = Player(tid, player.id, player.name, player.position, player.games, player.ab, 
+            player.hits, player.avg, player.singles, player.doubles, player.triples, player.hr, player.rbi, 
+            player.so, player.era, player.slg )
+        db.session.add(new_entry)
+    db.session.commit()
+
+    if p_players:
+        for player in p_players:
+            db.session.delete(player)
+            db.session.commit()
+    for player in pitchers:
+        new_entry = Pitcher(tid, player.id, player.name, player.games, player.so, player.era)
+        db.session.add(new_entry)
+    db.session.commit()
+
     return render_template('stats.html', myteamname=myteamname, stats=stats, pitchers=pitchers)
+
+@app.route('/leaders')
+def leaders():
+    players = Player.query.all()
+    pitchers = Pitcher.query.all()
+
+    return render_template('leaders.html', players=players, pitchers=pitchers)
 
 if __name__ == '__main__':
     app.run(debug=True)
