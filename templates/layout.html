@@ -18,30 +18,69 @@
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
         <script type="text/javascript" language="javascript" src="//code.jquery.com/jquery-1.12.4.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+        
         <script type="text/javascript" class="init">
             $(document).ready(function() {
                 $('table.display').DataTable( {
-                    "paging":   false,
+                    "paging": false,
                     "info": false,
                     "searching": false,
+                    "scrollX": true,
+                    "aaSorting": []
+                } );
+                $('table.hitting-leaders').DataTable( {
+                    "order": [[ 10, "desc"]],
+                    "paging": true,
+                    "info": true,
+                    "searching": true,
+                    "scrollX": true,
+                    "aaSorting": []
+                } );
+                $('table.pitching-leaders').DataTable( {
+                    "order": [[ 4, "asc"]],
+                    "paging": true,
+                    "info": true,
+                    "searching": true,
                     "scrollX": true,
                     "aaSorting": []
                 } );
             } );
         </script>
 
+        <!-- jQuery Tabs -->
+        <script>
+            $(document).ready(function(){
+                $('ul.tabs li').click(function(){
+                    var tab_id = $(this).attr('data-tab');
+                    var table = $('table.pitching-leaders').DataTable();
+
+                    $('ul.tabs li').removeClass('current');
+                    $('.tab-content').removeClass('current');
+                    $(this).addClass('current');
+                    $("#"+tab_id).addClass('current');
+                    table.columns.adjust().draw();
+                });
+            });
+        </script>
+
         <link rel="stylesheet" type="text/css" href="//fonts.googleapis.com/css?family=Raleway:400,300,600">
+        <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,400,700">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='normalize.css') }}">
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='skeleton.css') }}">
         <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Lato:300,400">
         <script src="https://use.fontawesome.com/b50c010594.js"></script>
     </head>
     <body>
-        <header>
+        <div class="header">
             <div class="navbar">
-                <h3><a href="/">SmallBall Player Stats</a></h3>
+                <div class="container">
+                    <h3 class="navbar-title"><a href="/">SB Player Stats</a></h3>
+                    <ul>
+                        <li class="li-right"><a href="/leaders">Leaders</a></li>
+                    </ul>
+                </div>
             </div>
-        </header>
+        </div>
         <div class="container">
             {% block body %}{% endblock %}
         </div>
