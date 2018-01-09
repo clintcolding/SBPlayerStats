@@ -47,6 +47,29 @@
             } );
         </script>
 
+        <!-- Ranking index that persists with search -->
+        <script>
+            $(document).ready(function() {
+                var t = $('table.hitting-leaders').DataTable();
+                t.on( 'order.dt search.dt', function () {
+                    t.column(0, { order:'applied'}).nodes().each( function (cell, i) {
+                        cell.innerHTML = i+1;
+                    } );
+                } ).draw(); 
+            }); 
+        </script>
+
+        <script>
+            $(document).ready(function() {
+                var t = $('table.pitching-leaders').DataTable();
+                t.on( 'order.dt search.dt', function () {
+                    t.column(0, { order:'applied'}).nodes().each( function (cell, i) {
+                        cell.innerHTML = i+1;
+                    } );
+                } ).draw(); 
+            }); 
+        </script>
+
         <!-- jQuery Tabs -->
         <script>
             $(document).ready(function(){
