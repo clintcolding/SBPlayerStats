@@ -1,0 +1,79 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+
+<ul class="tabs">
+    <li class="tab-link current" data-tab="hitting">Hitting</li>
+    <li class="tab-link" data-tab="pitching">Pitching</li>
+</ul>
+
+<div id="hitting" class="tab-content current">
+    <div class="row">
+        <table id="hitting" class="hitting-leaders" width="100%">
+            <thead>    
+                <tr>
+                    <th>Team</th>
+                    <th>Player</th>
+                    <th>G</th>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>1B</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>RBI</th>
+                    <th>AVG</th>
+                    <th>SLG</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for entry in players %}
+                <tr>
+                    <td><a class="recent" href="{{ "/stats/{0}".format(entry.teamid) }}">{{ entry.teamid }}</a></td>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.games }}</td>
+                    <td>{{ entry.ab }}</td>
+                    <td>{{ entry.hits }}</td>
+                    <td>{{ entry.singles }}</td>
+                    <td>{{ entry.doubles }}</td>
+                    <td>{{ entry.triples }}</td>
+                    <td>{{ entry.hr }}</td>
+                    <td>{{ entry.rbi }}</td>
+                    <td>{{ entry.avg }}</td>
+                    <td>{{ entry.slg }}</td>
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div id="pitching" class="tab-content">
+    <div class="row">
+        <table id="pitching" class="pitching-leaders" width="100%">
+            <thead>
+                <tr>
+                    <th>Team</th>
+                    <th>Player</th>
+                    <th>G</th>
+                    <th>SO</th>
+                    <th>ERA</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entry in pitchers %}
+            <tr>
+                <td><a class="recent" href="{{ "/stats/{0}".format(entry.teamid) }}">{{ entry.teamid }}</a></td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.games }}</td>
+                <td>{{ entry.so }}</td>
+                <td>{{ entry.era }}</td>
+            </tr>    
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
