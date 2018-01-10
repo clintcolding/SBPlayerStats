@@ -50,7 +50,7 @@
         <!-- Ranking index that persists with search -->
         <script>
             $(document).ready(function() {
-                $('table.hitting-leaders, table.pitching-leaders').each(function(){ 
+                $('#hitting-leaders, #pitching-leaders').each(function(){ 
                     var t = $(this).DataTable();
                     t.on( 'order.dt search.dt', function () {
                         t.column(0, { order:'applied'}).nodes().each( function (cell, i) {
