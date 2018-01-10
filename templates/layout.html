@@ -50,23 +50,14 @@
         <!-- Ranking index that persists with search -->
         <script>
             $(document).ready(function() {
-                var t = $('table.hitting-leaders').DataTable();
-                t.on( 'order.dt search.dt', function () {
-                    t.column(0, { order:'applied'}).nodes().each( function (cell, i) {
+                $('table.hitting-leaders, table.pitching-leaders').each(function(){ 
+                    var t = $(this).DataTable();
+                    t.on( 'order.dt search.dt', function () {
+                        t.column(0, { order:'applied'}).nodes().each( function (cell, i) {
                         cell.innerHTML = i+1;
                     } );
-                } ).draw(); 
-            }); 
-        </script>
-
-        <script>
-            $(document).ready(function() {
-                var t = $('table.pitching-leaders').DataTable();
-                t.on( 'order.dt search.dt', function () {
-                    t.column(0, { order:'applied'}).nodes().each( function (cell, i) {
-                        cell.innerHTML = i+1;
-                    } );
-                } ).draw(); 
+                    } ).draw(); 
+                } )
             }); 
         </script>
 
@@ -108,7 +99,7 @@
             {% block body %}{% endblock %}
         </div>
         <div class="footer">
-                <a href="https://github.com/clintcolding/SBPlayerStats" target="_blank"><i class="fa fa-github" aria-hidden="true"></i> Find this project on GitHub</a>
+            <a href="https://github.com/clintcolding/SBPlayerStats" target="_blank"><i class="fa fa-github" aria-hidden="true"></i> Find this project on GitHub</a>
         </div>
     </body>
 </html>
