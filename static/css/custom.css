@@ -21,6 +21,19 @@ body {
     border-color: #FF7E67;
 }
 
+.btn-outline-success:not([disabled]):not(.disabled).active, 
+.btn-outline-success:not([disabled]):not(.disabled):active, 
+.show>.btn-outline-success.dropdown-toggle {
+    background-color: #FF7E67;
+    border-color: #FF7E67;
+    box-shadow: none;
+}
+
+.btn-outline-success.focus, 
+.btn-outline-success:focus {
+    box-shadow: none;
+}
+
 .jumbotron {
     margin-top: -1.5rem;
 }
