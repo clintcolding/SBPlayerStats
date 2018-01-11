@@ -1,5 +1,5 @@
-# SB Player Stats
+# SmallStats
 
-A small side project that computes advanced baseball statistics for the popular baseball simulation game, [SmallBall](http://smallball.com)!
+Sortable stats for your [SmallBall](http://smallball.com) teams, player rankings and more!
 
-> This is a work in progress, any feature requests or suggestions are welcome...
+![SmallStats](/static/images/smallstats.png)
