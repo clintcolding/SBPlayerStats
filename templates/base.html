@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    {% block head %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{ url_for('static', filename='images/favicon.ico') }}">
+
+    <title>SmallStats</title>
+
+    <!-- Bootstrap core CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/css/bootstrap.min.css" integrity="sha384-Zug+QiDoJOrZ5t4lssLdxGhVrurbmBWopoEl+M6BdEfwnCJZtKxi1KgxUyJq13dy" crossorigin="anonymous">
+    {% endblock %}
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/custom.css') }}">
+  </head>
+
+  <body>
+
+    <nav class="navbar navbar-expand-md navbar-dark fixed-top bg-dark">
+      <a class="navbar-brand" href="/">SmallStats</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <!-- Navbar links -->
+      <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/leaders">Leaders </a>
+          </li>
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="http://example.com" id="dropdown01" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">SmallBall</a>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+              <a class="dropdown-item" href="http://smallball.com/ball/home/index.shtml" target="_blank">Baseball</a>
+              <a class="dropdown-item" href="http://smallball.com/ball/leagues/index.shtml" target="_blank">Leagues</a>
+              <a class="dropdown-item" href="http://www.smallball.org/forum.php" target="_blank">Forum</a>
+            </div>
+          </li>
+        </ul>
+
+        <!-- Team search -->
+        <form class="form-inline my-2 my-lg-0" action="/search" method="POST">
+            <input class="form-control mr-sm-2" name="teamid" placeholder="Team ID">
+            <input class="btn btn-outline-success my-2 my-sm-0" type="submit" value="Search">
+        </form>
+      </div>
+    </nav>
+
+    <main role="main">
+
+      <!-- Optional jumbotron -->
+      {% block jumbotron %}
+      {% endblock %}
+
+      <div class="container">
+        <!-- Page content -->
+        {% block content %}
+        {% endblock %}
+        <hr>
+      </div>
+
+    </main>
+
+    <footer class="container">
+      <p>&copy; SmallStats 2018</p>
+    </footer>
+
+    {% block script %}
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-111614536-1"></script>
+    <script src="{{url_for('.static', filename='js/googleanalytics.js')}}"></script>
+    <!-- FontAwesome -->
+    <script src="https://use.fontawesome.com/b50c010594.js"></script>
+    <!-- jQuery -->
+    <script src="//code.jquery.com/jquery-1.12.4.js"></script>
+    <!-- Bootstrap -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.3/js/bootstrap.min.js" integrity="sha384-a5N7Y/aK3qNeh15eJKGWxsqtnX/wWdSZSKp+81YjTmS15nvnvxKHuzaWwXHDli+4" crossorigin="anonymous"></script>
+    {% endblock %}
+  </body>
+</html>
