@@ -1,14 +1,20 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 
-{% block body %}
+{% block head %}
+    {{ super() }}
 
-<ul class="tabs">
-    <li class="tab-link current" data-tab="hitting-tab">Hitting</li>
-    <li class="tab-link" data-tab="pitching-tab">Pitching</li>
-</ul>
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+{% endblock %}
 
-<div id="hitting-tab" class="tab-content current">
-    <div class="row">
+{% block content %}
+    <h2>Season Leaders</h2>
+
+    <ul class="tabs">
+        <li class="tab-link current" data-tab="hitting-tab">Hitting</li>
+        <li class="tab-link" data-tab="pitching-tab">Pitching</li>
+    </ul>
+
+    <div id="hitting-tab" class="tab-content current">
         <table id="hitting-leaders" class="hitting-leaders" width="100%">
             <thead>    
                 <tr>
@@ -49,10 +55,8 @@
             </tbody>
         </table>
     </div>
-</div>
 
-<div id="pitching-tab" class="tab-content">
-    <div class="row">
+    <div id="pitching-tab" class="tab-content">
         <table id="pitching-leaders" class="pitching-leaders" width="100%">
             <thead>
                 <tr>
@@ -78,6 +82,12 @@
             </tbody>
         </table>
     </div>
-</div>
+{% endblock %}
 
+{% block script %}
+    {{ super() }}
+    
+    <script charset="utf-8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{url_for('.static', filename='js/leaders_tabs.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/leaders_datatables.js')}}"></script>
 {% endblock %}

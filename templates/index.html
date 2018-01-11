@@ -1,21 +1,39 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 
-{% block body %}
-
-    <center>
-        <form action="/search" method="POST">
+{% block jumbotron %}
+    <div class="jumbotron">
+        <div class="container">
             <div class="row">
-                <input class="search" name="teamid" placeholder="Team ID">
+                <div class="col-md-8">
+                    <h2 class="display-3">Welcome to SmallStats!</h2>
+                </div>
+                <div class="col-md-4">
+                    <img class="index-arrow" src="{{url_for('.static', filename='images/arrow.png')}}">
+                </div>
+                <div class="col-md-12">
+                    <p>Sortable stats for your SmallBall teams, player rankings and more! Get started now by searching for your team!</p>
+                </div>
             </div>
-            <input class="button" type="submit" value="Submit">
-        </form>
-    </center>
+        </div>
+    </div>
+{% endblock %}
 
-    <!-- <div class="row">
-        <h4>Recent</h3>
-        {% for search in recent %}
-            <div class="row"><a class="recent" href="{{ "/stats/{0}".format(search.teamid) }}">{{ search.teamid }}</a></div>
-        {% endfor %}
-    </div> -->
-
+{% block content %}
+    <div class="row">
+        <div class="col-md-4">
+            <h2>Sortable Stats</h2>
+            <p>Find sortable stats for any team. You can even sort by multiple columns by shift clicking!</p>
+            <img class="index-img" src="{{url_for('.static', filename='images/sort.png')}}">
+        </div>
+        <div class="col-md-4">
+            <h2>Leaders</h2>
+            <p>View the top performing players in both hitting and pitching. Sortable by multiple stats!</p>
+            <img class="index-img" src="{{url_for('.static', filename='images/leaders.png')}}">
+        </div>
+        <div class="col-md-4">
+            <h2>Rankings</h2>
+            <p>Search for your team on the leaders page to see how your players rank against the competition!</p>
+            <img class="index-img" src="{{url_for('.static', filename='images/rankings.png')}}">
+        </div>
+    </div>
 {% endblock %}

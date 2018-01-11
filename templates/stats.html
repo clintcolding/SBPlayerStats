@@ -1,11 +1,17 @@
-{% extends 'layout.html' %}
+{% extends 'base.html' %}
 
-{% block body %}
+{% block head %}
+    {{ super() }}
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
     <div class="row">
-        <div class="seven columns">
+        <div class="col-md-8">
                 <h2>{{ myteamname }}</h2>
         </div>
-        <div class="five colums">
+        <div class="col-md-4">
             <div class="team-info"><strong>{{ stats.tid }}</strong></div>
             <div class="team-info">
                 {% for i in range(stats.stars) %}
@@ -16,65 +22,70 @@
         </div>
     </div>
     
-    <h5>Batting</h5>
+    <ul class="tabs">
+        <li class="tabs-link current" data-tab="hitting-tab">Hitting</li>
+        <li class="tabs-link" data-tab="pitching-tab">Pitching</li>
+        <li class="tabs-link" data-tab="team-tab">Team</li>
+    </ul>
 
-    <table id="batting" class="display" width="100%">
-        <thead>    
-            <tr>
-                <th>Player</th>
-                <th>Pos</th>
-                <th>G</th>
-                <th>AB</th>
-                <th>H</th>
-                <th>1B</th>
-                <th>2B</th>
-                <th>3B</th>
-                <th>HR</th>
-                <th>RBI</th>
-                <th>AVG</th>
-                <th>SLG</th>
-            </tr>
-        </thead>
-        <tfoot>
-            <tr>
-                <th>Total</th>
-                <th></th>
-                <th>{{ stats.games }}</th>
-                <th>{{ stats.ab }}</th>
-                <th>{{ stats.hits }}</th>
-                <th>{{ stats.singles }}</th>
-                <th>{{ stats.doubles }}</th>
-                <th>{{ stats.triples }}</th>
-                <th>{{ stats.hr }}</th>
-                <th>{{ stats.rbi }}</th>
-                <th>{{ stats.avg }}</th>
-                <th>{{ stats.slg }}</th>
-            </tr>
-        </tfoot>
-        <tbody>
-        {% for entry in stats.players %}
-            <tr>
-                <td>{{ entry.name }}</td>
-                <td>{{ entry.position }}</td>
-                <td>{{ entry.games }}</td>
-                <td>{{ entry.ab }}</td>
-                <td>{{ entry.hits }}</td>
-                <td>{{ entry.singles }}</td>
-                <td>{{ entry.doubles }}</td>
-                <td>{{ entry.triples }}</td>
-                <td>{{ entry.hr }}</td>
-                <td>{{ entry.rbi }}</td>
-                <td>{{ entry.avg }}</td>
-                <td>{{ entry.slg }}</td>
-            </tr>
-        {% endfor %} 
-        </tbody>
-    </table>
+    <div id="hitting-tab" class="tab-content current">
+        <table id="hitting" class="hitting" width="100%">
+            <thead>    
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th>G</th>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>1B</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>RBI</th>
+                    <th>AVG</th>
+                    <th>SLG</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th></th>
+                    <th>{{ stats.games }}</th>
+                    <th>{{ stats.ab }}</th>
+                    <th>{{ stats.hits }}</th>
+                    <th>{{ stats.singles }}</th>
+                    <th>{{ stats.doubles }}</th>
+                    <th>{{ stats.triples }}</th>
+                    <th>{{ stats.hr }}</th>
+                    <th>{{ stats.rbi }}</th>
+                    <th>{{ stats.avg }}</th>
+                    <th>{{ stats.slg }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+            {% for entry in stats.players %}
+                <tr>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.position }}</td>
+                    <td>{{ entry.games }}</td>
+                    <td>{{ entry.ab }}</td>
+                    <td>{{ entry.hits }}</td>
+                    <td>{{ entry.singles }}</td>
+                    <td>{{ entry.doubles }}</td>
+                    <td>{{ entry.triples }}</td>
+                    <td>{{ entry.hr }}</td>
+                    <td>{{ entry.rbi }}</td>
+                    <td>{{ entry.avg }}</td>
+                    <td>{{ entry.slg }}</td>
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
+    </div>
 
-    <div class="row">
-        <div class="seven columns">
-            <h5>Pitching</h5>
-            <table id="pitching" class="display" width="100%">
+    <div id="pitching-tab" class="tab-content">
+        <div class="col-md-6">
+            <table id="pitching" class="pitching" width="100%">
                 <thead>
                     <tr>
                         <th>Player</th>
@@ -103,9 +114,11 @@
                 </tbody>
             </table>
         </div>
-        <div class="five columns">
-            <h5>Team</h5>
-            <table id="team" class="display" width="100%">
+    </div>
+
+    <div id="team-tab" class="tab-content">
+        <div class="col-md-6">
+            <table id="team" class="team" width="100%">
                 <thead>
                     <th>W</th>
                     <th>L</th>
@@ -123,4 +136,12 @@
             </table>
         </div>
     </div>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    
+    <script charset="utf-8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{url_for('.static', filename='js/stats_datatables.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/stats_tabs.js')}}"></script>
 {% endblock %}
