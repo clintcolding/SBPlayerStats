@@ -29,6 +29,11 @@ a {
     color: #FF7E67;
 }
 
+footer a:hover {
+    color: #FF7E67;
+    text-decoration: underline;
+}
+
 table a:hover {
     color: #FF7E67;
     text-decoration: none;
