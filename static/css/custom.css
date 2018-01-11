@@ -1,0 +1,124 @@
+/* Padding for fixed navbar
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+body {
+    padding-top: 5rem;
+}
+
+/* Theme overrides
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+
+.bg-dark {
+    background-color: #07689F!important;
+}
+
+.btn-outline-success {
+    color: #fff;
+    border-color: #FF7E67;
+}
+
+.btn-outline-success:hover {
+    background-color: #FF7E67;
+    border-color: #FF7E67;
+}
+
+.jumbotron {
+    margin-top: -1.5rem;
+}
+
+a {
+    color: #FF7E67;
+}
+
+table a:hover {
+    color: #FF7E67;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+/* jQuery Tabs
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+ul.tabs {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+}
+
+ul.tabs li {
+    background: none;
+    color: #222;
+    display: inline-block;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+ul.tabs li.current {
+    font-weight: bold;
+    border-bottom: 2px solid #FF7E67;
+}
+
+.tab-content {
+    display: none;
+    padding: 15px;
+}
+
+.tab-content.current {
+    display: inherit;
+}
+
+/* DataTables
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+table.dataTable thead th{
+    padding: 10px 12px;
+}
+  
+table.dataTable tfoot th{
+    padding: 10px 10px 0px 10px;
+}
+
+@media (max-width: 900px) {
+    table.dataTable thead th.sorting,
+    table.dataTable thead th.sorting_asc,
+    table.dataTable thead th.sorting_desc {
+        background: none;
+        padding: 8px 10px;
+    }
+}
+
+.hitting-leaders, .pitching-leaders, .hitting, .pitching, .team{
+    width: 100%;
+}
+
+/* Stats Page
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.team-info {
+    text-align: right;
+}
+
+@media (max-width: 767px) {
+    .team-info {
+        text-align: left;
+    }
+}
+
+/* Index Page
+–––––––––––––––––––––––––––––––––––––––––––––––––– */
+.index-arrow {
+    height:100px;
+}
+
+@media (max-width: 1199px) {
+    .index-arrow {
+        display: none;
+    }
+}
+
+.index-img {
+    width: 100%;
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
