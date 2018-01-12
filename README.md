@@ -2,4 +2,4 @@
 
 Sortable stats for your [SmallBall](http://smallball.com) teams, player rankings and more!
 
-![SmallStats](/static/images/smallstats.png)
+[![SmallStats](/static/images/smallstats.png)](http://smallstats.net)
