@@ -3,7 +3,7 @@ from update import update_stats
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('cron', hour=16, minute=30)
+@sched.scheduled_job('cron', hour=16, minute=45)
 def scheduled_job():
     print('This job updates stats daily at 11 PM.')
     update_stats()
