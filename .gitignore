@@ -1,2 +1,4 @@
 debug.py
+Procfile.windows
+.env
 __pycache__
