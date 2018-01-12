@@ -184,5 +184,9 @@ def leaders():
 
     return render_template('leaders.html', teams=teams, players=players, pitchers=pitchers)
 
+@app.route('/faq')
+def faq():
+    return render_template('faq.html')
+
 if __name__ == '__main__':
     app.run(debug=True)
