@@ -21,7 +21,7 @@ $(document).ready(function() {
     } );
 // Datatables for team leaders
     $('#team-leaders').DataTable( {
-        "order": [[ 4, "desc"]],
+        "order": [[ 4, "desc"], [ 2, "desc"]],
         "pageLength": 25,
         "paging": true,
         "info": true,
