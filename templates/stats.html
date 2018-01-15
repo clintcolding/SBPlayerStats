@@ -12,10 +12,19 @@
                 <h2>{{ stats.name }}</h2>
         </div>
         <div class="col-md-4">
+            <img class="stadium-img" src="{{ url_for('static', filename='images/') }}{{ stats.stadium }}.jpg">
             <div class="team-info"><strong>{{ stats.tid }}</strong></div>
             <div class="team-info">
-                {% for i in range(stats.stars) %}
+                {% if stats.pl != "ls" %}
+                    {{ stats.pl_position }} in PL {{ stats.pl }}
+                {% endif %}
+            </div>
+            <div class="team-info">
+                {% for i in range(10 - stats.stars) %}
                     <i class="fa fa-star-o" aria-hidden="true"></i>
+                {% endfor %}
+                {% for i in range(stats.stars) %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
                 {% endfor %}
             </div>
             <div class="team-info">{{ stats.trained }}</div>

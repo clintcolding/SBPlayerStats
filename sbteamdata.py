@@ -1,5 +1,6 @@
 from urllib import request, parse
 from bs4 import BeautifulSoup
+import inflection
 
 class Team:
 
@@ -7,6 +8,9 @@ class Team:
         self.name = name
         self.tid = 0
         self.stars = 0
+        self.stadium = "Intel"
+        self.pl = 0
+        self.pl_position = 0
         self.trained = 0
         self.wins = 0
         self.losses = 0
@@ -192,6 +196,49 @@ def get_team_data(tid):
     team_star_level = team_star_level[:-4]
     team_last_trained = (team_star.text.strip()).title()
 
+    # Get team PL and PL position
+
+    leagues = soup.find_all('td', attrs={'class': 'table_team_bottom1'})
+    league = leagues[3]
+    league = league.find('a')
+    league = league.get('href')
+    league = str(league).replace("/ball/leagues/pro","")
+    pl = str(league).replace(".shtml","")
+
+    position = soup.find_all('td', attrs={'class': 'table_team_bottom2'})
+    position = position[3].text.strip()
+    if position != "n/a":
+        pl_position = inflection.ordinalize(position)
+    else:
+        pl_position = "n/a"
+
+    # Get home stadium
+
+    stadium_id = soup.find('img', attrs={'border': '2'})
+
+    if "None" in str(stadium_id):
+        stadium = "park2"
+    if "park4" in str(stadium_id):
+        stadium = "park4"
+    if "park5" in str(stadium_id):
+        stadium = "park5"
+    if "park6" in str(stadium_id):
+        stadium = "park6"
+    if "park7" in str(stadium_id):
+        stadium = "park7"
+    if "park8" in str(stadium_id):
+        stadium = "park8"
+    if "park9" in str(stadium_id):
+        stadium = "park9"
+    if "park10" in str(stadium_id):
+        stadium = "park10"
+    if "park11" in str(stadium_id):
+        stadium = "park11"
+    if "park12" in str(stadium_id):
+        stadium = "park12"
+    if "park13" in str(stadium_id):
+        stadium = "park13"
+
     # Get wins/losses and runs scored/against
     game_data = soup.find_all('td', attrs={'class': 'recent_text_right'})
 
@@ -280,6 +327,9 @@ def get_team_data(tid):
     myteam.tid = team_id
     myteam.stars = int(team_star_level)
     myteam.trained = team_last_trained
+    myteam.pl = pl
+    myteam.pl_position = pl_position
+    myteam.stadium = stadium
     myteam.wins = game_wins
     myteam.losses = game_losses
     myteam.pct = game_pct
