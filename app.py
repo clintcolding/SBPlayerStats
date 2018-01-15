@@ -148,10 +148,11 @@ def stats(tid):
         db.session.delete(team)
         db.session.commit()
 
-    new_entry = Team(tid, stats.name, stats.games, stats.ab, stats.hits, stats.avg, stats.singles,
-        stats.doubles, stats.triples, stats.hr, stats.rbi, stats.so, stats.era, stats.slg, stats.wins,
-        stats.losses, stats.pct, stats.rs, stats.ra)
-    db.session.add(new_entry)
+    if team.games != 0:
+        new_entry = Team(tid, stats.name, stats.games, stats.ab, stats.hits, stats.avg, stats.singles,
+            stats.doubles, stats.triples, stats.hr, stats.rbi, stats.so, stats.era, stats.slg, stats.wins,
+            stats.losses, stats.pct, stats.rs, stats.ra)
+        db.session.add(new_entry)
 
     if players:
         for player in players:
@@ -159,10 +160,11 @@ def stats(tid):
             db.session.commit()
 
     for player in stats.players:
-        new_entry = Player(tid, player.id, player.name, player.position, player.games, player.ab, 
-            player.hits, player.avg, player.singles, player.doubles, player.triples, player.hr, player.rbi, 
-            player.so, player.era, player.slg)
-        db.session.add(new_entry)
+        if player.games != "0":    
+            new_entry = Player(tid, player.id, player.name, player.position, player.games, player.ab, 
+                player.hits, player.avg, player.singles, player.doubles, player.triples, player.hr, player.rbi, 
+                player.so, player.era, player.slg)
+            db.session.add(new_entry)
 
     if p_players:
         for player in p_players:
