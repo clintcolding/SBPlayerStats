@@ -148,7 +148,7 @@ def stats(tid):
         db.session.delete(team)
         db.session.commit()
 
-    if team.games != 0:
+    if stats.games != 0:
         new_entry = Team(tid, stats.name, stats.games, stats.ab, stats.hits, stats.avg, stats.singles,
             stats.doubles, stats.triples, stats.hr, stats.rbi, stats.so, stats.era, stats.slg, stats.wins,
             stats.losses, stats.pct, stats.rs, stats.ra)
