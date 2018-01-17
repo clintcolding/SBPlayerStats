@@ -18,7 +18,7 @@
             <div class="team-info"><strong>{{ stats.tid }}</strong></div>
             <div class="team-info">
                 {% if stats.pl != "ls" %}
-                    {{ stats.pl_position }} in PL {{ stats.pl }}
+                    {{ stats.pl_position }} in <a href="http://smallball.com/ball/leagues/pro{{ stats.pl }}.shtml" target="_blank">PL {{ stats.pl }}</a>
                 {% endif %}
             </div>
             <div class="team-info">
@@ -114,7 +114,7 @@
                     </tr>
                 </tfoot>
                 <tbody>
-                {% for entry in pitchers %}
+                {% for entry in stats.pitchers %}
                 <tr>
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.games }}</td>
