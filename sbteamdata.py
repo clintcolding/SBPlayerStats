@@ -18,6 +18,7 @@ class Team:
         self.rs = 0
         self.ra = 0
         self.players = []
+        self.pitchers = []
         self.games = 0
         self.ab = 0
         self.hits = 0
@@ -101,6 +102,14 @@ class Team:
         self.so = so
         self.era = team_era
         self.slg = team_slg
+
+    def get_team_pitchers(self):
+
+        for player in self.players:
+            if "-" not in player.era:
+                self.pitchers.append(player)
+            elif player.so is not "0":
+                self.pitchers.append(player)
 
 class Player:
 
@@ -324,6 +333,7 @@ def get_team_data(tid):
         id += 1
 
     myteam.get_team_stats()
+    myteam.get_team_pitchers()
     myteam.tid = team_id
     myteam.stars = int(team_star_level)
     myteam.trained = team_last_trained
@@ -337,16 +347,3 @@ def get_team_data(tid):
     myteam.ra = game_runs_against
 
     return myteam
-
-def get_pitchers(tid):
-
-    myteam = get_team_data(tid)
-    pitchers = []
-
-    for player in myteam.players:
-        if "-" not in player.era:
-            pitchers.append(player)
-        elif player.so is not "0":
-            pitchers.append(player)
-
-    return pitchers
