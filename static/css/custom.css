@@ -42,7 +42,7 @@ a {
     color: #FF7E67;
 }
 
-footer a:hover {
+a:hover {
     color: #FF7E67;
     text-decoration: underline;
 }
@@ -116,6 +116,11 @@ table.dataTable tfoot th{
 @media (max-width: 767px) {
     .team-info {
         text-align: left;
+    }
+    .fa-star {
+        float: left;
+        margin-top: 4px;
+        margin-right: 4px;
     }
 }
 
