@@ -123,7 +123,7 @@ def index():
 @app.route('/search', methods=['POST'])
 def search():
     tid = request.form['teamid']
-    
+
     team = Recent.query.filter_by(teamid=tid).first()
 
     if team:
@@ -147,11 +147,10 @@ def stats(tid):
         db.session.delete(team)
         db.session.commit()
 
-    if stats.games != 0:
-        new_entry = Team(tid, stats.name, stats.games, stats.ab, stats.hits, stats.avg, stats.singles,
-            stats.doubles, stats.triples, stats.hr, stats.rbi, stats.so, stats.era, stats.slg, stats.wins,
-            stats.losses, stats.pct, stats.rs, stats.ra)
-        db.session.add(new_entry)
+    new_entry = Team(tid, stats.name, stats.games, stats.ab, stats.hits, stats.avg, stats.singles,
+                     stats.doubles, stats.triples, stats.hr, stats.rbi, stats.so, stats.era,
+                     stats.slg, stats.wins, stats.losses, stats.pct, stats.rs, stats.ra)
+    db.session.add(new_entry)
 
     if players:
         for player in players:
@@ -159,20 +158,18 @@ def stats(tid):
             db.session.commit()
 
     for player in stats.players:
-        if player.games:    
-            new_entry = Player(tid, player.id, player.name, player.position, player.games, player.ab, 
-                player.hits, player.avg, player.singles, player.doubles, player.triples, player.hr, player.rbi, 
-                player.so, player.era, player.slg)
-            db.session.add(new_entry)
+        new_entry = Player(tid, player.id, player.name, player.position, player.games, player.ab,
+                           player.hits, player.avg, player.singles, player.doubles, player.triples,
+                           player.hr, player.rbi, player.so, player.era, player.slg)
+        db.session.add(new_entry)
 
     if pitchers:
         for player in pitchers:
             db.session.delete(player)
             db.session.commit()
     for player in stats.pitchers:
-        if player.era != "-":
-            new_entry = Pitcher(tid, player.id, player.name, player.games, player.so, player.era)
-            db.session.add(new_entry)
+        new_entry = Pitcher(tid, player.id, player.name, player.games, player.so, player.era)
+        db.session.add(new_entry)
     db.session.commit()
 
     return render_template('stats.html', stats=stats)
@@ -184,6 +181,14 @@ def leaders():
     pitchers = Pitcher.query.filter(Pitcher.games >= 5)
 
     return render_template('leaders.html', teams=teams, players=players, pitchers=pitchers)
+
+@app.route('/gameleaders')
+def gameleaders():
+    teams = Team.query.filter(Team.games >= 5)
+    players = Player.query.filter(Player.games >= 5)
+    pitchers = Pitcher.query.filter(Pitcher.games >= 5)
+
+    return render_template('gameleaders.html', teams=teams, players=players, pitchers=pitchers)
 
 @app.route('/faq')
 def faq():
