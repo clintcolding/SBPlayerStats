@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title%}| Leaders Per Game{% endblock %}
+{% block head %}
+    {{ super() }}
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+    <h2>Season Leaders Per Game</h2>
+    <p style="font-style:italic;">Overall season stats divided by the number of games played.</p>
+    
+    <ul class="tabs">
+        <li class="tab-link current" data-tab="hitting-tab">Hitting</li>
+        <li class="tab-link" data-tab="pitching-tab">Pitching</li>
+        <li class="tab-link" data-tab="team-tab">Team</li>
+    </ul>
+
+    <div id="hitting-tab" class="tab-content current">
+        <table id="hitting-leaders" class="hitting-leaders" width="100%">
+            <thead>    
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Player</th>
+                    <th>G</th>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>1B</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>RBI</th>
+                    <th>AVG</th>
+                    <th>SLG</th>
+                </tr>
+            </thead>
+
+            <tbody>
+            {% for entry in players %}
+                <tr>
+                    <td></td>
+                    <td><a class="recent" href="{{ "/stats/{0}".format(entry.teamid) }}">{{ entry.teamid }}</a></td>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.games }}</td>
+                    <td>{{ (entry.ab / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ (entry.hits / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ (entry.singles / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ (entry.doubles / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ (entry.triples / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ (entry.hr / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ (entry.rbi / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ entry.avg }}</td>
+                    <td>{{ entry.slg }}</td>
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+
+    <div id="pitching-tab" class="tab-content">
+        <table id="pitching-leaders" class="pitching-leaders" width="100%">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>Player</th>
+                    <th>G</th>
+                    <th>SO</th>
+                    <th>ERA</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entry in pitchers %}
+            <tr>
+                <td></td>
+                <td><a class="recent" href="{{ "/stats/{0}".format(entry.teamid) }}">{{ entry.teamid }}</a></td>
+                <td>{{ entry.name }}</td>
+                <td>{{ entry.games }}</td>
+                <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ entry.era }}</td>
+            </tr>    
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div id="team-tab" class="tab-content">
+        <table id="team-leaders" class="team-leaders" width="100%">
+            <thead>
+                <tr>
+                    <th>Rank</th>
+                    <th>Team</th>
+                    <th>G</th>
+                    <th>RS</th>
+                    <th>RA</th>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>1B</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>RBI</th>
+                    <th>AVG</th>
+                    <th>SLG</th>
+                    <th>SO</th>
+                    <th>ERA</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for entry in teams %}
+            <tr>
+                <td></td>
+                <td><a class="recent" href="{{ "/stats/{0}".format(entry.teamid) }}">{{ entry.teamid }}</a></td>
+                <td>{{ entry.games }}</td>
+                <td>{{ (entry.rs / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.ra / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.ab / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.hits / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.singles / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.doubles / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.triples / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.hr / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ (entry.rbi / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ entry.avg }}</td>
+                <td>{{ entry.slg }}</td>
+                <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ entry.era }}</td>
+            </tr>    
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    
+    <script charset="utf-8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{url_for('.static', filename='js/leaders_tabs.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/gameleaders_datatables.js')}}"></script>
+{% endblock %}
