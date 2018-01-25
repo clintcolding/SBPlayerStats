@@ -12,6 +12,21 @@
     <div class="row">
         <div class="col-md-7">
                 <h2>{{ stats.name }}</h2>
+                <div class="dropdown" style="margin-top:1rem;">
+                    <button class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Season {{ stats.season }}
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="/stats/{{ stats.tid }}/all">All</a>
+                        {% for entry in team %}
+                            {% if entry.season == stats.season|int %}
+                                <a class="dropdown-item active" href="/stats/{{ stats.tid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                            {% else %}
+                                <a class="dropdown-item" href="/stats/{{ stats.tid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
         </div>
         <div class="col-md-5">
             <img class="stadium-img" src="{{ url_for('static', filename='images/') }}{{ stats.stadium }}.jpg">
@@ -33,6 +48,10 @@
                 {{ stats.trained }}
             </div>
         </div>
+    </div>
+
+    <div class="row">
+        
     </div>
     
     <ul class="tabs">
@@ -104,6 +123,7 @@
                         <th>Player</th>
                         <th>G</th>
                         <th>SO</th>
+                        <th>SO/G</th>
                         <th>ERA</th>
                     </tr>
                 </thead>
@@ -112,6 +132,7 @@
                         <th>Total</th>
                         <th>{{ stats.games }}</th>
                         <th>{{ stats.so }}</th>
+                        <th>{{ (stats.so|int / stats.games|int) | round(1, 'floor') }}</th>
                         <th>{{ stats.era }}</th>
                     </tr>
                 </tfoot>
@@ -121,6 +142,7 @@
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.games }}</td>
                     <td>{{ entry.so }}</td>
+                    <td>{{ (entry.so|int / entry.games|int) | round(1, 'floor') }}</td>
                     <td>{{ entry.era }}</td>
                 </tr>    
                 {% endfor %}
