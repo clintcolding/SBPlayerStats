@@ -1,0 +1,178 @@
+{% extends 'base.html' %}
+
+{% block title%}| {{ stats.tid }}{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-7">
+            <h2>{{ stats.name }}</h2>
+            <div class="dropdown" style="margin-top:1rem;">
+                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    Season {{ stats.season }}
+                </button>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="/stats/{{ stats.teamid }}/all">All</a>
+                    {% for entry in team %}
+                        {% if request.path == '/stats/{0}/{1}'.format(stats.teamid, entry.season) %}
+                            <a class="dropdown-item active" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                        {% else %}
+                            <a class="dropdown-item" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-5">
+            <img class="stadium-img" src="{{ url_for('static', filename='images/') }}{{ stats.stadium }}.jpg">
+            <div class="team-info"><strong>{{ stats.teamid }}</strong></div>
+            <div class="team-info">
+                {% if stats.pl != "ls" %}
+                    {{ stats.pl_position }} in <a href="http://smallball.com/ball/leagues/pro{{ stats.pl }}.shtml" target="_blank">PL {{ stats.pl }}</a>
+                {% endif %}
+            </div>
+            <div class="team-info">
+                {% for i in range(10 - stats.stars) %}
+                    <i class="fa fa-star-o" aria-hidden="true"></i>
+                {% endfor %}
+                {% for i in range(stats.stars) %}
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                {% endfor %}
+            </div>
+            <div class="team-info">
+                {{ stats.trained }}
+            </div>
+        </div>
+    </div>
+    
+    <ul class="tabs">
+        <li class="tabs-link current" data-tab="hitting-tab">Hitting</li>
+        <li class="tabs-link" data-tab="pitching-tab">Pitching</li>
+        <li class="tabs-link" data-tab="team-tab">Team</li>
+    </ul>
+
+    <div id="hitting-tab" class="tab-content current">
+        <table id="hitting" class="hitting" width="100%">
+            <thead>    
+                <tr>
+                    <th>Player</th>
+                    <th>Pos</th>
+                    <th>G</th>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>1B</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>RBI</th>
+                    <th>AVG</th>
+                    <th>SLG</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th></th>
+                    <th>{{ stats.games }}</th>
+                    <th>{{ stats.ab }}</th>
+                    <th>{{ stats.hits }}</th>
+                    <th>{{ stats.singles }}</th>
+                    <th>{{ stats.doubles }}</th>
+                    <th>{{ stats.triples }}</th>
+                    <th>{{ stats.hr }}</th>
+                    <th>{{ stats.rbi }}</th>
+                    <th>{{ stats.avg }}</th>
+                    <th>{{ stats.slg }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+            {% for entry in players %}
+                <tr>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.position }}</td>
+                    <td>{{ entry.games }}</td>
+                    <td>{{ entry.ab }}</td>
+                    <td>{{ entry.hits }}</td>
+                    <td>{{ entry.singles }}</td>
+                    <td>{{ entry.doubles }}</td>
+                    <td>{{ entry.triples }}</td>
+                    <td>{{ entry.hr }}</td>
+                    <td>{{ entry.rbi }}</td>
+                    <td>{{ entry.avg }}</td>
+                    <td>{{ entry.slg }}</td>
+                </tr>
+            {% endfor %} 
+            </tbody>
+        </table>
+    </div>
+
+    <div id="pitching-tab" class="tab-content">
+        <div class="col-md-6">
+            <table id="pitching" class="pitching" width="100%">
+                <thead>
+                    <tr>
+                        <th>Player</th>
+                        <th>G</th>
+                        <th>SO</th>
+                        <th>SO/G</th>
+                        <th>ERA</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <th>Total</th>
+                        <th>{{ stats.games }}</th>
+                        <th>{{ stats.so }}</th>
+                        <th>{{ (stats.so / stats.games) | round(1, 'floor') }}</th>
+                        <th>{{ stats.era }}</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                {% for entry in pitchers %}
+                <tr>
+                    <td>{{ entry.name }}</td>
+                    <td>{{ entry.games }}</td>
+                    <td>{{ entry.so }}</td>
+                    <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
+                    <td>{{ entry.era }}</td>
+                </tr>    
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="team-tab" class="tab-content">
+        <div class="col-md-6">
+            <table id="team" class="team" width="100%">
+                <thead>
+                    <th>W</th>
+                    <th>L</th>
+                    <th>PCT</th>
+                    <th>RS</th>
+                    <th>RA</th>
+                </thead>
+                <tr>
+                    <td>{{ stats.wins }}</td>
+                    <td>{{ stats.losses }}</td>
+                    <td>{{ stats.pct }}</td>
+                    <td>{{ stats.rs }}</td>
+                    <td>{{ stats.ra }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    
+    <script charset="utf-8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{url_for('.static', filename='js/stats_datatables.js')}}"></script>
+    <script src="{{url_for('.static', filename='js/stats_tabs.js')}}"></script>
+{% endblock %}
