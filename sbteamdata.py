@@ -7,6 +7,7 @@ class Team:
     def __init__(self, name):
         self.name = name
         self.tid = 0
+        self.season = 0
         self.stars = 0
         self.stadium = "Intel"
         self.pl = 0
@@ -179,6 +180,16 @@ class Player:
 
 def get_team_data(tid):
 
+    # Request sb home page
+    search_url = "http://www.smallball.com/ball/home/index.shtml"
+    response = request.urlopen(search_url)
+
+    # Parse html from repsonse
+    soup = BeautifulSoup(response, 'html.parser')
+    season = soup.find('td', attrs={'class': 'text_22'})
+    season = season.text.strip()
+    season = season[7:]
+
     # Post to SB search page
     search_data = {"oid": tid, "Search": "search"}
     search_url = "http://smallball.com/go/on.ball.team"
@@ -335,6 +346,7 @@ def get_team_data(tid):
     myteam.get_team_stats()
     myteam.get_team_pitchers()
     myteam.tid = team_id
+    myteam.season = season
     myteam.stars = int(team_star_level)
     myteam.trained = team_last_trained
     myteam.pl = pl
@@ -347,3 +359,16 @@ def get_team_data(tid):
     myteam.ra = game_runs_against
 
     return myteam
+
+def get_current_season():
+    # Request sb home page
+    search_url = "http://www.smallball.com/ball/home/index.shtml"
+    response = request.urlopen(search_url)
+
+    # Parse html from repsonse
+    soup = BeautifulSoup(response, 'html.parser')
+    season = soup.find('td', attrs={'class': 'text_22'})
+    season = season.text.strip()
+    season = season[7:]
+
+    return season
