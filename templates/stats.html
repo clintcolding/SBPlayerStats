@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title%}| {{ stats.tid }}{% endblock %}
+{% block title%}| {{ team.teamid }}{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -11,41 +11,50 @@
 {% block content %}
     <div class="row">
         <div class="col-md-7">
-                <h2>{{ stats.name }}</h2>
-                <div class="dropdown" style="margin-top:1rem;">
+                <h2>{{ team.name }}</h2>
+                <form action="/refreshstats" method="POST">
+                    <label for="refresh-btn" style="font-style:italic;">{{ updated }}</label>
+                    <input type="hidden" value="{{ team.teamid }}" name="tid">
+                    <a class="tooltips" data-toggle="tooltip" data-placement="top" title="Refresh">
+                        <button type="submit" class="refresh-btn" name="refresh-btn">
+                            <i class="fa fa-refresh" aria-hidden="true"></i>
+                        </button>
+                    </a>
+                </form>
+                <div class="dropdown season-dropdown">
                     <button class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Season {{ stats.season }}
+                        Season {{ team.season }}
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="/stats/{{ stats.tid }}/all">All</a>
-                        {% for entry in team %}
-                            {% if entry.season == stats.season|int %}
-                                <a class="dropdown-item active" href="/stats/{{ stats.tid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                        <a class="dropdown-item" href="/stats/{{ team.teamid }}/all">All</a>
+                        {% for entry in seasons %}
+                            {% if entry.season == team.season|int %}
+                                <a class="dropdown-item active" href="/stats/{{ team.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
                             {% else %}
-                                <a class="dropdown-item" href="/stats/{{ stats.tid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                                <a class="dropdown-item" href="/stats/{{ team.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
                             {% endif %}
                         {% endfor %}
                     </div>
                 </div>
         </div>
         <div class="col-md-5">
-            <img class="stadium-img" src="{{ url_for('static', filename='images/') }}{{ stats.stadium }}.jpg">
-            <div class="team-info"><strong>{{ stats.tid }}</strong></div>
+            <img class="stadium-img" src="{{ url_for('static', filename='images/') }}{{ team.stadium }}.jpg">
+            <div class="team-info"><strong>{{ team.teamid }}</strong></div>
             <div class="team-info">
-                {% if stats.pl != "ls" %}
-                    {{ stats.pl_position }} in <a href="http://smallball.com/ball/leagues/pro{{ stats.pl }}.shtml" target="_blank">PL {{ stats.pl }}</a>
+                {% if team.pl != "ls" %}
+                    {{ team.pl_position }} in <a href="http://smallball.com/ball/leagues/pro{{ team.pl }}.shtml" target="_blank">PL {{ team.pl }}</a>
                 {% endif %}
             </div>
             <div class="team-info">
-                {% for i in range(10 - stats.stars) %}
+                {% for i in range(10 - team.stars) %}
                     <i class="fa fa-star-o" aria-hidden="true"></i>
                 {% endfor %}
-                {% for i in range(stats.stars) %}
+                {% for i in range(team.stars) %}
                     <i class="fa fa-star" aria-hidden="true"></i>
                 {% endfor %}
             </div>
             <div class="team-info">
-                {{ stats.trained }}
+                {{ team.trained }}
             </div>
         </div>
     </div>
@@ -82,20 +91,20 @@
                 <tr>
                     <th>Total</th>
                     <th></th>
-                    <th>{{ stats.games }}</th>
-                    <th>{{ stats.ab }}</th>
-                    <th>{{ stats.hits }}</th>
-                    <th>{{ stats.singles }}</th>
-                    <th>{{ stats.doubles }}</th>
-                    <th>{{ stats.triples }}</th>
-                    <th>{{ stats.hr }}</th>
-                    <th>{{ stats.rbi }}</th>
-                    <th>{{ stats.avg }}</th>
-                    <th>{{ stats.slg }}</th>
+                    <th>{{ team.games }}</th>
+                    <th>{{ team.ab }}</th>
+                    <th>{{ team.hits }}</th>
+                    <th>{{ team.singles }}</th>
+                    <th>{{ team.doubles }}</th>
+                    <th>{{ team.triples }}</th>
+                    <th>{{ team.hr }}</th>
+                    <th>{{ team.rbi }}</th>
+                    <th>{{ team.avg }}</th>
+                    <th>{{ team.slg }}</th>
                 </tr>
             </tfoot>
             <tbody>
-            {% for entry in stats.players %}
+            {% for entry in players %}
                 <tr>
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.position }}</td>
@@ -130,14 +139,14 @@
                 <tfoot>
                     <tr>
                         <th>Total</th>
-                        <th>{{ stats.games }}</th>
-                        <th>{{ stats.so }}</th>
-                        <th>{{ (stats.so|int / stats.games|int) | round(1, 'floor') }}</th>
-                        <th>{{ stats.era }}</th>
+                        <th>{{ team.games }}</th>
+                        <th>{{ team.so }}</th>
+                        <th>{{ (team.so|int / team.games|int) | round(1, 'floor') }}</th>
+                        <th>{{ team.era }}</th>
                     </tr>
                 </tfoot>
                 <tbody>
-                {% for entry in stats.pitchers %}
+                {% for entry in pitchers %}
                 <tr>
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.games }}</td>
@@ -162,11 +171,11 @@
                     <th>RA</th>
                 </thead>
                 <tr>
-                    <td>{{ stats.wins }}</td>
-                    <td>{{ stats.losses }}</td>
-                    <td>{{ stats.pct }}</td>
-                    <td>{{ stats.rs }}</td>
-                    <td>{{ stats.ra }}</td>
+                    <td>{{ team.wins }}</td>
+                    <td>{{ team.losses }}</td>
+                    <td>{{ team.pct }}</td>
+                    <td>{{ team.rs }}</td>
+                    <td>{{ team.ra }}</td>
                 </tr>
             </table>
         </div>
