@@ -8,17 +8,17 @@ app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL')
 db = SQLAlchemy(app)
 
-class Recent(db.Model):
-    teamid = db.Column(db.Integer, primary_key=True)
-    time = db.Column(db.DateTime)
-
-    def __init__(self, teamid, time):
-        self.teamid = teamid
-        self.time = time
-
 class Team(db.Model):
-    teamid = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True)
+    time = db.Column(db.DateTime)
+    season = db.Column(db.Integer)
+    teamid = db.Column(db.Integer)
     name = db.Column(db.String)
+    stars = db.Column(db.Integer)
+    stadium = db.Column(db.String)
+    pl = db.Column(db.String)
+    pl_position = db.Column(db.String)
+    trained = db.Column(db.String)
     games = db.Column(db.Integer)
     ab = db.Column(db.Integer)
     hits = db.Column(db.Integer)
@@ -37,11 +37,18 @@ class Team(db.Model):
     rs = db.Column(db.Integer)
     ra = db.Column(db.Integer)
 
-    def __init__(self, teamid, name, games, ab, hits, avg, 
-                 singles, doubles, triples, hr, rbi, so, era, slg,
-                 wins, losses, pct, rs, ra):
+    def __init__(self, time, season, teamid, name, stars, stadium, pl, pl_position,
+                 trained, games, ab, hits, avg, singles, doubles, triples,
+                 hr, rbi, so, era, slg, wins, losses, pct, rs, ra):
+        self.time = time
+        self.season = season
         self.teamid = teamid
         self.name = name
+        self.stars = stars
+        self.stadium = stadium
+        self.pl = pl
+        self.pl_position = pl_position
+        self.trained = trained
         self.games = games
         self.ab = ab
         self.hits = hits
@@ -62,6 +69,7 @@ class Team(db.Model):
 
 class Player(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    season = db.Column(db.Integer)
     teamid = db.Column(db.Integer)
     playerid = db.Column(db.Integer)
     name = db.Column(db.String)
@@ -79,8 +87,9 @@ class Player(db.Model):
     era = db.Column(db.String)
     slg = db.Column(db.String)
 
-    def __init__(self, teamid, playerid, name, position, games, ab, hits,
+    def __init__(self, season, teamid, playerid, name, position, games, ab, hits,
                  avg, singles, doubles, triples, hr, rbi, so, era, slg):
+        self.season = season
         self.teamid = teamid
         self.playerid = playerid
         self.name = name
@@ -100,6 +109,7 @@ class Player(db.Model):
 
 class Pitcher(db.Model):
     id = db.Column(db.Integer, primary_key=True)
+    season = db.Column(db.Integer)
     teamid = db.Column(db.Integer)
     playerid = db.Column(db.Integer)
     name = db.Column(db.String)
@@ -107,7 +117,8 @@ class Pitcher(db.Model):
     so = db.Column(db.Integer)
     era = db.Column(db.String)
 
-    def __init__(self, teamid, playerid, name, games, so, era):
+    def __init__(self, season, teamid, playerid, name, games, so, era):
+        self.season = season
         self.teamid = teamid
         self.playerid = playerid
         self.name = name
@@ -124,32 +135,86 @@ def index():
 def search():
     tid = request.form['teamid']
 
-    team = Recent.query.filter_by(teamid=tid).first()
-
-    if team:
-        team.time = datetime.now()
-    else:
-        new_entry = Recent(tid, datetime.now())
-        db.session.add(new_entry)
-    db.session.commit()
-
     return redirect('/stats/{0}'.format(tid))
 
 @app.route('/stats/<tid>', methods=['GET', 'POST'])
 def stats(tid):
-    stats = sbteamdata.get_team_data(tid)
+    current_season = sbteamdata.get_current_season()
+    seasons = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).all()
+    team = Team.query.filter_by(teamid=tid, season=current_season).first()
 
-    team = Team.query.filter_by(teamid=tid).first()
-    players = Player.query.filter_by(teamid=tid).all()
-    pitchers = Pitcher.query.filter_by(teamid=tid).all()
+    if team and (team.time - datetime.now()).total_seconds() > -600:
+        players = Player.query.filter_by(teamid=tid, season=current_season).all()
+        pitchers = Pitcher.query.filter_by(teamid=tid, season=current_season).all()
+        updated = team.time.strftime('Updated on %B %d at %I:%M %p')
 
-    if team:
-        db.session.delete(team)
+    else:
+        stats = sbteamdata.get_team_data(tid)
+
+        team = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).all()
+        players = Player.query.filter_by(teamid=tid, season=stats.season).all()
+        pitchers = Pitcher.query.filter_by(teamid=tid, season=stats.season).all()
+
+        for entry in team:
+            if entry.season == int(stats.season):
+                db.session.delete(entry)
+                db.session.commit()
+
+        new_entry = Team(datetime.now(), stats.season, tid, stats.name, stats.stars, stats.stadium,
+                        stats.pl, stats.pl_position, stats.trained, stats.games, stats.ab, stats.hits,
+                        stats.avg, stats.singles, stats.doubles, stats.triples, stats.hr,
+                        stats.rbi, stats.so, stats.era, stats.slg, stats.wins, stats.losses,
+                        stats.pct, stats.rs, stats.ra)
+        db.session.add(new_entry)
+
+        if players:
+            for player in players:
+                db.session.delete(player)
+                db.session.commit()
+
+        for player in stats.players:
+            new_entry = Player(stats.season, tid, player.id, player.name, player.position, player.games,
+                            player.ab, player.hits, player.avg, player.singles, player.doubles,
+                            player.triples, player.hr, player.rbi, player.so, player.era, player.slg)
+            db.session.add(new_entry)
+
+        if pitchers:
+            for player in pitchers:
+                db.session.delete(player)
+                db.session.commit()
+        for player in stats.pitchers:
+            new_entry = Pitcher(stats.season, tid, player.id, player.name, player.games,
+                                player.so, player.era)
+            db.session.add(new_entry)
         db.session.commit()
 
-    new_entry = Team(tid, stats.name, stats.games, stats.ab, stats.hits, stats.avg, stats.singles,
-                     stats.doubles, stats.triples, stats.hr, stats.rbi, stats.so, stats.era,
-                     stats.slg, stats.wins, stats.losses, stats.pct, stats.rs, stats.ra)
+        team = Team.query.filter_by(teamid=tid, season=current_season).first()
+        players = Player.query.filter_by(teamid=tid, season=current_season).all()
+        pitchers = Pitcher.query.filter_by(teamid=tid, season=current_season).all()
+        updated = team.time.strftime('Updated on %B %d at %I:%M %p')
+
+    return render_template('stats.html', updated=updated, seasons=seasons, team=team, players=players, pitchers=pitchers)
+
+@app.route('/refreshstats', methods=['POST'])
+def refresh_stats():
+    tid = request.form['tid']
+
+    stats = sbteamdata.get_team_data(tid)
+
+    team = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).all()
+    players = Player.query.filter_by(teamid=tid, season=stats.season).all()
+    pitchers = Pitcher.query.filter_by(teamid=tid, season=stats.season).all()
+
+    for entry in team:
+        if entry.season == int(stats.season):
+            db.session.delete(entry)
+            db.session.commit()
+
+    new_entry = Team(datetime.now(), stats.season, tid, stats.name, stats.stars, stats.stadium,
+                     stats.pl, stats.pl_position, stats.trained, stats.games, stats.ab, stats.hits,
+                     stats.avg, stats.singles, stats.doubles, stats.triples, stats.hr,
+                     stats.rbi, stats.so, stats.era, stats.slg, stats.wins, stats.losses,
+                     stats.pct, stats.rs, stats.ra)
     db.session.add(new_entry)
 
     if players:
@@ -158,9 +223,9 @@ def stats(tid):
             db.session.commit()
 
     for player in stats.players:
-        new_entry = Player(tid, player.id, player.name, player.position, player.games, player.ab,
-                           player.hits, player.avg, player.singles, player.doubles, player.triples,
-                           player.hr, player.rbi, player.so, player.era, player.slg)
+        new_entry = Player(stats.season, tid, player.id, player.name, player.position, player.games,
+                           player.ab, player.hits, player.avg, player.singles, player.doubles,
+                           player.triples, player.hr, player.rbi, player.so, player.era, player.slg)
         db.session.add(new_entry)
 
     if pitchers:
@@ -168,25 +233,58 @@ def stats(tid):
             db.session.delete(player)
             db.session.commit()
     for player in stats.pitchers:
-        new_entry = Pitcher(tid, player.id, player.name, player.games, player.so, player.era)
+        new_entry = Pitcher(stats.season, tid, player.id, player.name, player.games,
+                            player.so, player.era)
         db.session.add(new_entry)
     db.session.commit()
 
-    return render_template('stats.html', stats=stats)
+    return redirect('/stats/{0}'.format(tid))
+
+@app.route('/stats/<tid>/<season>')
+def seasonstats(tid, season):
+    current_season = sbteamdata.get_current_season()
+
+    if season != 'all' and int(current_season) == int(season):
+
+        return redirect('/stats/{0}'.format(tid))
+    
+    else:
+        if season == "all":
+            team = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).all()
+            players = Player.query.filter_by(teamid=tid).all()
+            pitchers = Pitcher.query.filter_by(teamid=tid).all()
+            stats = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).first()
+
+            return render_template('allstats.html', team=team, stats=stats, players=players, pitchers=pitchers)
+        
+        else:
+            team = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).all()
+            players = Player.query.filter_by(teamid=tid, season=season).all()
+            pitchers = Pitcher.query.filter_by(teamid=tid, season=season).all()
+
+            for entry in team:
+                if entry.season == int(season):
+                    stats = entry
+
+            return render_template('seasonstats.html', team=team, stats=stats, players=players, pitchers=pitchers)
 
 @app.route('/leaders')
 def leaders():
-    teams = Team.query.filter(Team.games >= 5)
-    players = Player.query.filter(Player.games >= 5)
-    pitchers = Pitcher.query.filter(Pitcher.games >= 5)
+    current_season = sbteamdata.get_current_season()
+
+    teams = Team.query.filter_by(season=current_season).filter(Team.games >= 5)
+    players = Player.query.filter_by(season=current_season).filter(Player.games >= 5)
+    pitchers = Pitcher.query.filter_by(season=current_season).filter(Pitcher.games >= 5)
 
     return render_template('leaders.html', teams=teams, players=players, pitchers=pitchers)
 
 @app.route('/gameleaders')
 def gameleaders():
-    teams = Team.query.filter(Team.games >= 5)
-    players = Player.query.filter(Player.games >= 5)
-    pitchers = Pitcher.query.filter(Pitcher.games >= 5)
+    current_season = sbteamdata.get_current_season()
+
+    teams = Team.query.filter_by(season=current_season).filter(Team.games >= 5)
+    players = Player.query.filter_by(season=current_season).filter(Player.games >= 5)
+    pitchers = Pitcher.query.filter_by(season=current_season).filter(Pitcher.games >= 5)
 
     return render_template('gameleaders.html', teams=teams, players=players, pitchers=pitchers)
 
