@@ -6,7 +6,7 @@ import sbteamdata
 def update_stats(): 
     teamids = []
 
-    query = db.session.query(Player.teamid.distinct().label("teamid"))
+    query = db.session.query(Team.teamid.distinct().label("teamid"))
 
     for item in query:
         teamid = str(item)[1:]
