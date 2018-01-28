@@ -141,7 +141,11 @@
                         <th>Total</th>
                         <th>{{ team.games }}</th>
                         <th>{{ team.so }}</th>
-                        <th>{{ (team.so|int / team.games|int) | round(1, 'floor') }}</th>
+                        {% if team.games|int == 0 %}
+                            <th>"0"</th>
+                        {% else %}
+                            <th>{{ (team.so|int / team.games|int) | round(1, 'floor') }}</th>
+                        {% endif %}
                         <th>{{ team.era }}</th>
                     </tr>
                 </tfoot>
@@ -151,7 +155,11 @@
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.games }}</td>
                     <td>{{ entry.so }}</td>
-                    <td>{{ (entry.so|int / entry.games|int) | round(1, 'floor') }}</td>
+                    {% if team.games|int == 0 %}
+                        <th>"0"</th>
+                    {% else %}
+                        <th>{{ (team.so|int / team.games|int) | round(1, 'floor') }}</th>
+                    {% endif %}
                     <td>{{ entry.era }}</td>
                 </tr>    
                 {% endfor %}
