@@ -156,9 +156,9 @@
                     <td>{{ entry.games }}</td>
                     <td>{{ entry.so }}</td>
                     {% if entry.games|int == 0 %}
-                        <th>"0"</th>
+                        <td>"0"</td>
                     {% else %}
-                        <th>{{ (entry.so|int / entry.games|int) | round(1, 'floor') }}</th>
+                        <td>{{ (entry.so|int / entry.games|int) | round(1, 'floor') }}</td>
                     {% endif %}
                     <td>{{ entry.era }}</td>
                 </tr>    
