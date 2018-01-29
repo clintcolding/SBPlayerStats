@@ -155,10 +155,10 @@
                     <td>{{ entry.name }}</td>
                     <td>{{ entry.games }}</td>
                     <td>{{ entry.so }}</td>
-                    {% if team.games|int == 0 %}
+                    {% if entry.games|int == 0 %}
                         <th>"0"</th>
                     {% else %}
-                        <th>{{ (team.so|int / team.games|int) | round(1, 'floor') }}</th>
+                        <th>{{ (entry.so|int / entry.games|int) | round(1, 'floor') }}</th>
                     {% endif %}
                     <td>{{ entry.era }}</td>
                 </tr>    
