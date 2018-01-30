@@ -42,7 +42,7 @@
                 <tr>
                     <td></td>
                     <td><a class="recent" href="{{ "/stats/{0}".format(entry.teamid) }}">{{ entry.teamid }}</a></td>
-                    <td>{{ entry.name }}</td>
+                    <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
                     <td>{{ entry.games }}</td>
                     <td>{{ (entry.ab / entry.games) | round(1, 'floor') }}</td>
                     <td>{{ (entry.hits / entry.games) | round(1, 'floor') }}</td>
@@ -76,7 +76,7 @@
             <tr>
                 <td></td>
                 <td><a class="recent" href="{{ "/stats/{0}".format(entry.teamid) }}">{{ entry.teamid }}</a></td>
-                <td>{{ entry.name }}</td>
+                <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
                 <td>{{ entry.games }}</td>
                 <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
                 <td>{{ entry.era }}</td>
