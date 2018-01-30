@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 // Datatables for pitching
     $('#pitching').DataTable( {
-        "order": [[ 3, "asc"]],
+        "order": [[ 3, "desc"]],
         "paging": false,
         "info": false,
         "searching": false,
