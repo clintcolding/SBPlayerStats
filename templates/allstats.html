@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title%}| {{ stats.tid }}{% endblock %}
+{% block title%}| {{ stats.teamid }}{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -10,20 +10,31 @@
 
 {% block content %}
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-md-7">
             <h2>{{ stats.name }}</h2>
-            <strong>{{ stats.teamid }}</strong>
-            <div class="dropdown season-dropdown">
-                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    All Seasons
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item active" href="/stats/{{ stats.teamid }}/all">All</a>
-                    {% for entry in team %}
-                        <a class="dropdown-item" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
-                    {% endfor %}
-                </div>
+            <h6 class="dropdown-toggle pointer" id="dropdown01" data-toggle="dropdown">All Seasons</h6>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                <a class="dropdown-item active" href="/stats/{{ stats.teamid }}/all">All</a>
+                {% for entry in team %}
+                    <a class="dropdown-item" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                {% endfor %}
             </div>
+        </div>
+        <div class="col-md-5 team-info">
+            <strong>{{ stats.teamid }}</strong>
+        </div>
+    </div>
+
+    <div class="row row-bot-margin">
+        <div class="col-md-6">
+            <section>
+                <canvas id="barChart"></canvas>
+            </section>
+        </div>
+        <div class="col-md-6">
+            <section>
+                <canvas id="lineChart"></canvas>
+            </section>
         </div>
     </div>
     
@@ -55,7 +66,7 @@
             <tbody>
             {% for entry in players %}
                 <tr>
-                    <td>{{ entry.name }}</td>
+                    <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
                     <td>{{ entry.season }}</td>
                     <td>{{ entry.position }}</td>
                     <td>{{ entry.games }}</td>
@@ -89,7 +100,7 @@
             <tbody>
             {% for entry in pitchers %}
             <tr>
-                <td>{{ entry.name }}</td>
+                <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
                 <td>{{ entry.season }}</td>
                 <td>{{ entry.games }}</td>
                 <td>{{ entry.so }}</td>
@@ -153,6 +164,111 @@
 
 {% block script %}
     {{ super() }}
+    <script src="{{url_for('.static', filename='js/Chart.min.js')}}"></script>
+    <script>
+        var ctx = document.getElementById("barChart").getContext('2d');
+        var barChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: [
+                    {% for entry in team %}
+                        "Season " + {{entry.season}},
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: 'Wins',
+                    data: [
+                        {% for entry in team %}
+                            {{entry.wins}},
+                        {% endfor %}
+                    ],
+                    backgroundColor: [
+                        {% for entry in team %}
+                            'rgba(54, 162, 235, 0.2)',
+                        {% endfor %}
+                    ],
+                    borderColor: [
+                        {% for entry in team %}
+                            'rgba(54, 162, 235, 1)',
+                        {% endfor %}
+                    ],
+                    borderWidth: 1
+                },
+                {
+                    label: 'Losses',
+                    data: [
+                        {% for entry in team %}
+                            {{entry.losses}},
+                        {% endfor %}
+                    ],
+                    backgroundColor: [
+                        {% for entry in team %}
+                            'rgba(255, 99, 132, 0.2)',
+                        {% endfor %}
+                    ],
+                    borderColor: [
+                        {% for entry in team %}
+                            'rgba(255, 99, 132, 1)',
+                        {% endfor %}
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+            },
+        });
+    </script>
+    <script>
+        var config = {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for entry in team %}
+                        "Season " + {{entry.season}},
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: "Team AVG",
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 0.8)',
+                    data: [
+                        {% for entry in team %}
+                            {{entry.avg}},
+                        {% endfor %}
+                    ],
+                    fill: false,
+                },
+                {
+                    label: "Team SLG",
+                    backgroundColor: 'rgba(255, 99, 132, 0.2)',
+                    borderColor: 'rgba(255, 99, 132, 0.8)',
+                    data: [
+                        {% for entry in team %}
+                            {{entry.slg}},
+                        {% endfor %}
+                    ],
+                    fill: false,
+                }], 
+            },
+            options: {
+                responsive: true,
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+            }
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            window.myLine = new Chart(ctx, config);
+        };
+    </script>
     
     <script charset="utf-8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <script src="{{url_for('.static', filename='js/allstats_datatables.js')}}"></script>
