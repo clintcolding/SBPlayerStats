@@ -37,7 +37,10 @@ body {
 }
 
 .season-dropdown {
-    margin-top: 1rem; 
+    float: right;
+}
+
+.season-dropdown-bot {
     margin-bottom: 1rem;
 }
 
@@ -174,4 +177,17 @@ table.dataTable tfoot th{
     background: none;
     border: 0;
     color: #FF7E67;
+}
+
+.row-bot-margin {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+.pointer {
+    cursor: pointer;
+}
+
+.updated-on {
+    float: right;
 }
