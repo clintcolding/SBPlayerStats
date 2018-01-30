@@ -1,10 +1,9 @@
-from app import app, db, Team, Player, Pitcher
+from app import db, Team, Player, Pitcher
 import sbteamdata
 
 def get_career_stats(tid, playerid):
 
-    with app.app_context():
-        players = Player.query.filter_by(teamid=tid, playerid=playerid).all()
+    players = Player.query.filter_by(teamid=tid, playerid=playerid).all()
 
     name = ""
     position = ""
