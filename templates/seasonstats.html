@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 
-{% block title%}| {{ stats.tid }}{% endblock %}
+{% block title%}| {{ stats.teamid }}{% endblock %}
 
 {% block head %}
     {{ super() }}
@@ -12,24 +12,19 @@
     <div class="row">
         <div class="col-md-7">
             <h2>{{ stats.name }}</h2>
-            <div class="dropdown season-dropdown">
-                <button class="btn btn-outline-dark dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Season {{ stats.season }}
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a class="dropdown-item" href="/stats/{{ stats.teamid }}/all">All</a>
-                    {% for entry in team %}
-                        {% if request.path == '/stats/{0}/{1}'.format(stats.teamid, entry.season) %}
-                            <a class="dropdown-item active" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
-                        {% else %}
-                            <a class="dropdown-item" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
-                        {% endif %}
-                    {% endfor %}
-                </div>
+            <h6 class="dropdown-toggle pointer" id="dropdown01" data-toggle="dropdown">Season {{ stats.season }}</h6>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                <a class="dropdown-item" href="/stats/{{ stats.teamid }}/all">All</a>
+                {% for entry in team %}
+                    {% if entry.season == stats.season|int %}
+                        <a class="dropdown-item active" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                    {% else %}
+                        <a class="dropdown-item" href="/stats/{{ stats.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                    {% endif %}
+                {% endfor %}
             </div>
         </div>
         <div class="col-md-5">
-            <img class="stadium-img" src="{{ url_for('static', filename='images/') }}{{ stats.stadium }}.jpg">
             <div class="team-info"><strong>{{ stats.teamid }}</strong></div>
             <div class="team-info">
                 {% if stats.pl != "ls" %}
@@ -43,9 +38,6 @@
                 {% for i in range(stats.stars) %}
                     <i class="fa fa-star" aria-hidden="true"></i>
                 {% endfor %}
-            </div>
-            <div class="team-info">
-                {{ stats.trained }}
             </div>
         </div>
     </div>
@@ -93,7 +85,7 @@
             <tbody>
             {% for entry in players %}
                 <tr>
-                    <td>{{ entry.name }}</td>
+                    <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
                     <td>{{ entry.position }}</td>
                     <td>{{ entry.games }}</td>
                     <td>{{ entry.ab }}</td>
@@ -112,50 +104,58 @@
     </div>
 
     <div id="pitching-tab" class="tab-content">
-        <div class="col-md-6">
-            <table id="pitching" class="pitching" width="100%">
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>G</th>
-                        <th>SO</th>
-                        <th>SO/G</th>
-                        <th>ERA</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>Total</th>
-                        <th>{{ stats.games }}</th>
-                        <th>{{ stats.so }}</th>
-                        <th>{{ (stats.so / stats.games) | round(1, 'floor') }}</th>
-                        <th>{{ stats.era }}</th>
-                    </tr>
-                </tfoot>
-                <tbody>
-                {% for entry in pitchers %}
+        <table id="pitching" class="pitching" width="100%">
+            <thead>
                 <tr>
-                    <td>{{ entry.name }}</td>
-                    <td>{{ entry.games }}</td>
-                    <td>{{ entry.so }}</td>
-                    <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
-                    <td>{{ entry.era }}</td>
-                </tr>    
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    <th>Player</th>
+                    <th>G</th>
+                    <th>SO</th>
+                    <th>SO/G</th>
+                    <th>ERA</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>{{ stats.games }}</th>
+                    <th>{{ stats.so }}</th>
+                    <th>{{ (stats.so / stats.games) | round(1, 'floor') }}</th>
+                    <th>{{ stats.era }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+            {% for entry in pitchers %}
+            <tr>
+                <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
+                <td>{{ entry.games }}</td>
+                <td>{{ entry.so }}</td>
+                <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
+                <td>{{ entry.era }}</td>
+            </tr>    
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <div id="team-tab" class="tab-content">
-        <div class="col-md-6">
-            <table id="team" class="team" width="100%">
+        <table id="team" class="team" width="100%">
                 <thead>
                     <th>W</th>
                     <th>L</th>
                     <th>PCT</th>
                     <th>RS</th>
                     <th>RA</th>
+                    <th>AB</th>
+                    <th>H</th>
+                    <th>1B</th>
+                    <th>2B</th>
+                    <th>3B</th>
+                    <th>HR</th>
+                    <th>RBI</th>
+                    <th>AVG</th>
+                    <th>SLG</th>
+                    <th>SO</th>
+                    <th>ERA</th>
                 </thead>
                 <tr>
                     <td>{{ stats.wins }}</td>
@@ -163,9 +163,19 @@
                     <td>{{ stats.pct }}</td>
                     <td>{{ stats.rs }}</td>
                     <td>{{ stats.ra }}</td>
-                </tr>
-            </table>
-        </div>
+                    <td>{{ stats.ab }}</td>
+                    <td>{{ stats.hits }}</td>
+                    <td>{{ stats.singles }}</td>
+                    <td>{{ stats.doubles }}</td>
+                    <td>{{ stats.triples }}</td>
+                    <td>{{ stats.hr }}</td>
+                    <td>{{ stats.rbi }}</td>
+                    <td>{{ stats.avg }}</td>
+                    <td>{{ stats.slg }}</td>
+                    <td>{{ stats.so }}</td>
+                    <td>{{ stats.era }}</td>
+                </tr> 
+        </table>
     </div>
 {% endblock %}
 

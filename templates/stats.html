@@ -11,32 +11,20 @@
 {% block content %}
     <div class="row">
         <div class="col-md-7">
-                <h2>{{ team.name }}</h2>
-                <form action="/refreshstats" method="POST">
-                    <label for="refresh-btn" style="font-style:italic;">{{ updated }}</label>
-                    <input type="hidden" value="{{ team.teamid }}" name="tid">
-                    <a class="tooltips" data-toggle="tooltip" data-placement="top" title="Refresh">
-                        <button type="submit" class="refresh-btn" name="refresh-btn">
-                            <i class="fa fa-refresh" aria-hidden="true"></i>
-                        </button>
-                    </a>
-                </form>
-                <div class="dropdown season-dropdown">
-                    <button class="btn btn-outline-dark dropdown-toggle dropdown-toggle-split" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Season {{ team.season }}
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="/stats/{{ team.teamid }}/all">All</a>
-                        {% for entry in seasons %}
-                            {% if entry.season == team.season|int %}
-                                <a class="dropdown-item active" href="/stats/{{ team.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
-                            {% else %}
-                                <a class="dropdown-item" href="/stats/{{ team.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
+            <h2>{{ team.name }}</h2>
+            <h6 class="dropdown-toggle pointer" id="dropdown01" data-toggle="dropdown">Season {{ team.season }}</h6>
+            <div class="dropdown-menu" aria-labelledby="dropdown01">
+                <a class="dropdown-item" href="/stats/{{ team.teamid }}/all">All</a>
+                {% for entry in seasons %}
+                    {% if entry.season == team.season|int %}
+                        <a class="dropdown-item active" href="/stats/{{ team.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                    {% else %}
+                        <a class="dropdown-item" href="/stats/{{ team.teamid }}/{{ entry.season }}">Season {{ entry.season }}</a>
+                    {% endif %}
+                {% endfor %}
+            </div>
         </div>
+        
         <div class="col-md-5">
             <img class="stadium-img" src="{{ url_for('static', filename='images/') }}{{ team.stadium }}.jpg">
             <div class="team-info"><strong>{{ team.teamid }}</strong></div>
@@ -57,10 +45,6 @@
                 {{ team.trained }}
             </div>
         </div>
-    </div>
-
-    <div class="row">
-        
     </div>
     
     <ul class="tabs">
@@ -106,7 +90,7 @@
             <tbody>
             {% for entry in players %}
                 <tr>
-                    <td>{{ entry.name }}</td>
+                    <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
                     <td>{{ entry.position }}</td>
                     <td>{{ entry.games }}</td>
                     <td>{{ entry.ab }}</td>
@@ -125,68 +109,101 @@
     </div>
 
     <div id="pitching-tab" class="tab-content">
-        <div class="col-md-6">
-            <table id="pitching" class="pitching" width="100%">
-                <thead>
-                    <tr>
-                        <th>Player</th>
-                        <th>G</th>
-                        <th>SO</th>
-                        <th>SO/G</th>
-                        <th>ERA</th>
-                    </tr>
-                </thead>
-                <tfoot>
-                    <tr>
-                        <th>Total</th>
-                        <th>{{ team.games }}</th>
-                        <th>{{ team.so }}</th>
-                        {% if team.games|int == 0 %}
-                            <th>"0"</th>
-                        {% else %}
-                            <th>{{ (team.so|int / team.games|int) | round(1, 'floor') }}</th>
-                        {% endif %}
-                        <th>{{ team.era }}</th>
-                    </tr>
-                </tfoot>
-                <tbody>
-                {% for entry in pitchers %}
+        <table id="pitching" class="pitching" width="100%">
+            <thead>
                 <tr>
-                    <td>{{ entry.name }}</td>
-                    <td>{{ entry.games }}</td>
-                    <td>{{ entry.so }}</td>
-                    {% if entry.games|int == 0 %}
-                        <td>"0"</td>
+                    <th>Player</th>
+                    <th>G</th>
+                    <th>SO</th>
+                    <th>SO/G</th>
+                    <th>ERA</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Total</th>
+                    <th>{{ team.games }}</th>
+                    <th>{{ team.so }}</th>
+                    {% if team.games|int == 0 %}
+                        <th>"0"</th>
                     {% else %}
-                        <td>{{ (entry.so|int / entry.games|int) | round(1, 'floor') }}</td>
+                        <th>{{ (team.so|int / team.games|int) | round(1, 'floor') }}</th>
                     {% endif %}
-                    <td>{{ entry.era }}</td>
-                </tr>    
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                    <th>{{ team.era }}</th>
+                </tr>
+            </tfoot>
+            <tbody>
+            {% for entry in pitchers %}
+            <tr>
+                <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
+                <td>{{ entry.games }}</td>
+                <td>{{ entry.so }}</td>
+                {% if entry.games|int == 0 %}
+                    <td>"0"</td>
+                {% else %}
+                    <td>{{ (entry.so|int / entry.games|int) | round(1, 'floor') }}</td>
+                {% endif %}
+                <td>{{ entry.era }}</td>
+            </tr>    
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
 
     <div id="team-tab" class="tab-content">
-        <div class="col-md-6">
-            <table id="team" class="team" width="100%">
-                <thead>
-                    <th>W</th>
-                    <th>L</th>
-                    <th>PCT</th>
-                    <th>RS</th>
-                    <th>RA</th>
-                </thead>
-                <tr>
-                    <td>{{ team.wins }}</td>
-                    <td>{{ team.losses }}</td>
-                    <td>{{ team.pct }}</td>
-                    <td>{{ team.rs }}</td>
-                    <td>{{ team.ra }}</td>
-                </tr>
-            </table>
-        </div>
+        <table id="team" class="team" width="100%">
+            <thead>
+                <th>W</th>
+                <th>L</th>
+                <th>PCT</th>
+                <th>RS</th>
+                <th>RA</th>
+                <th>AB</th>
+                <th>H</th>
+                <th>1B</th>
+                <th>2B</th>
+                <th>3B</th>
+                <th>HR</th>
+                <th>RBI</th>
+                <th>AVG</th>
+                <th>SLG</th>
+                <th>SO</th>
+                <th>ERA</th>
+            </thead>
+            <tr>
+                <td>{{ team.wins }}</td>
+                <td>{{ team.losses }}</td>
+                <td>{{ team.pct }}</td>
+                <td>{{ team.rs }}</td>
+                <td>{{ team.ra }}</td>
+                <td>{{ team.ab }}</td>
+                <td>{{ team.hits }}</td>
+                <td>{{ team.singles }}</td>
+                <td>{{ team.doubles }}</td>
+                <td>{{ team.triples }}</td>
+                <td>{{ team.hr }}</td>
+                <td>{{ team.rbi }}</td>
+                <td>{{ team.avg }}</td>
+                <td>{{ team.slg }}</td>
+                <td>{{ team.so }}</td>
+                <td>{{ team.era }}</td>
+            </tr> 
+        </table>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {{ super() }}
+    <div class="updated-on">
+        <form action="/refreshstats" method="POST">
+            <label for="refresh-btn" style="font-style:italic;">{{ updated }}</label>
+            <input type="hidden" value="{{ team.teamid }}" name="tid">
+            <a class="tooltips" data-toggle="tooltip" data-placement="top" title="Refresh">
+                <button type="submit" class="refresh-btn" name="refresh-btn">
+                    <i class="fa fa-refresh" aria-hidden="true"></i>
+                </button>
+            </a>
+        </form>
     </div>
 {% endblock %}
 
