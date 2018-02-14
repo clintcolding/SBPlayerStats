@@ -5,7 +5,7 @@ import sbteamdata
 
 def update_stats(): 
     teamids = []
-    
+
     with app.app_context():
         query = db.session.query(Team.teamid.distinct().label("teamid"))
 
