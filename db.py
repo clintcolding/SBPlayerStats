@@ -119,3 +119,31 @@ class Pitcher(db.Model):
         self.games = games
         self.so = so
         self.era = era
+
+class TeamGains(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    tid = db.Column(db.Integer)
+    date = db.Column(db.String)
+    time = db.Column(db.String)
+    contact = db.Column(db.String)
+    power = db.Column(db.String)
+    skill = db.Column(db.String)
+    run = db.Column(db.String)
+    throw = db.Column(db.String)
+    catch = db.Column(db.String)
+    pitch = db.Column(db.String)
+    total = db.Column(db.String)
+
+    def __init__(self, tid, date, time, contact, power,
+                 skill, run, throw, catch, pitch, total):
+        self.tid = tid
+        self.date = date
+        self.time = time
+        self.contact = contact
+        self.power = power
+        self.skill = skill
+        self.run = run
+        self.throw = throw
+        self.catch = catch
+        self.pitch = pitch
+        self.total = total
