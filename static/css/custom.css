@@ -191,3 +191,18 @@ table.dataTable tfoot th{
 .updated-on {
     float: right;
 }
+
+.add-gains {
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+
+.section {
+    width: 50px;
+}
+
+.delete-btn {
+    background: none;
+    border: 0;
+    color: #FF7E67;
+}
