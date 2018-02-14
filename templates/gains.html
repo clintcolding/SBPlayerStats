@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+
+{% block title%}| GainTracker{% endblock %}
+{% block head %}
+    {{ super() }}
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css">
+{% endblock %}
+
+{% block content %}
+    <div class="row row-bot-margin">
+        <div class="col-md-8">
+            <h2>GainTracker | {{ tid }}</h2>
+        </div>
+        <div class="col-md-4">  
+            <form action="/uploadgains" method="POST" enctype="multipart/form-data">
+                <label class="custom-file-label" for="uploadreport">Upload training report...</label>
+                <input id="uploadreport" class="custom-file-input" type="file" name="training_report" placeholder="Training Report" onchange="form.submit()">
+            </form>
+        </div>
+    </div>
+
+    <div class="row row-bot-margin">
+        <div class="col-md-6">
+            <section>
+                <canvas id="pieChart"></canvas>
+            </section>
+        </div>
+        <div class="col-md-6">
+            <section>
+                <canvas id="lineChart"></canvas>
+            </section>
+        </div>
+    </div>
+    
+    <table id="team-gains" class="team-gains" width="100%">
+        <thead>    
+            <tr>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Contact</th>
+                <th>Power</th>
+                <th>Skill</th>
+                <th>Run</th>
+                <th>Throw</th>
+                <th>Catch</th>
+                <th>Pitch</th>
+                <th>Total</th>
+                <th></th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% for entry in gains %}
+            <tr>
+                <td>{{ entry.date }}</td>
+                <td>{{ entry.time }}</td>
+                <td>{{ entry.contact }}</td>
+                <td>{{ entry.power }}</td>
+                <td>{{ entry.skill }}</td>
+                <td>{{ entry.run }}</td>
+                <td>{{ entry.throw }}</td>
+                <td>{{ entry.catch }}</td>
+                <td>{{ entry.pitch }}</td>
+                <td>{{ entry.total }}</td>
+                <td>
+                    <form action="/removegains" method="POST">
+                        <!-- <input type="hidden" value="{{ entry.date }}" name="row_date">
+                        <input type="hidden" value="{{ entry.tid }}" name="row_tid"> -->
+                        <input type="hidden" value="{{ entry.id }}" name="row_id">
+                        <!-- <input class="btn btn-primary" type="submit" value="Remove"> -->
+                        <a class="tooltips" data-toggle="tooltip" data-placement="top" title="Delete">
+                            <button type="submit" class="delete-btn">
+                                <i class="fa fa-trash-o fa-lg" aria-hidden="true"></i>
+                            </button>
+                        </a>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %} 
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block script %}
+    {{ super() }}
+    <script src="{{url_for('.static', filename='js/Chart.min.js')}}"></script>
+    <script>
+        var ctx = document.getElementById("pieChart").getContext('2d');
+        var pieChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ["Contact", "Power", "Skill", "Run", "Catch", "Throw", "Pitch"],
+                datasets: [{
+                    label: 'Total Gains by Skill',
+                    data: [{{ total_gains.contact }}, {{ total_gains.power }}, {{ total_gains.skill }}, {{ total_gains.run }}, {{ total_gains.catch }}, {{ total_gains.throw }},{{ total_gains.pitch }}],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(221, 99, 255, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(221, 99, 255, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+            },
+        });
+    </script>
+    <script>
+        var config = {
+            type: 'line',
+            data: {
+                labels: [
+                    {% for gain in gains %}
+                        '{{ gain.date }}',
+                    {% endfor %}
+                ],
+                datasets: [{
+                    label: "Total Gains by Day",
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    borderColor: 'rgba(54, 162, 235, 0.8)',
+                    data: [
+                        {% for gain in gains %}
+                            '{{ gain.total }}',
+                        {% endfor %}
+                    ],
+                    fill: false,
+                }], 
+            },
+            options: {
+                responsive: true,
+                tooltips: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                },
+            }
+        };
+
+        window.onload = function() {
+            var ctx = document.getElementById("lineChart").getContext("2d");
+            window.myLine = new Chart(ctx, config);
+        };
+    </script>
+    <script charset="utf-8" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <script src="{{url_for('.static', filename='js/gains_datatables.js')}}"></script>
+{% endblock %}
