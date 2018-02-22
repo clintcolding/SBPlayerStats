@@ -16,13 +16,11 @@ def update_stats():
 
         for tid in teamids:
             current_season = sbteamdata.get_current_season()
-            seasons = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).all()
             team = Team.query.filter_by(teamid=tid, season=current_season).first()
 
             if team and (team.time - datetime.now()).total_seconds() > -600:
                 players = Player.query.filter_by(teamid=tid, season=current_season).all()
                 pitchers = Pitcher.query.filter_by(teamid=tid, season=current_season).all()
-                updated = team.time.strftime('Updated on %B %d at %I:%M %p')
             
             else:
                 stats = sbteamdata.get_team_data(tid)
