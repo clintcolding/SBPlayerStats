@@ -138,11 +138,19 @@ def seasonstats(tid, season):
     else:
         if season == "all":
             team = Team.query.filter_by(teamid=tid).order_by(Team.season.asc()).all()
-            players = Player.query.filter_by(teamid=tid).all()
-            pitchers = Pitcher.query.filter_by(teamid=tid).all()
             stats = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).first()
 
-            return render_template('allstats.html', team=team, stats=stats, players=players, pitchers=pitchers)
+            seasons = 0
+            for season in team:
+                seasons += 1
+            
+            players = []
+
+            for i in range(1, 13):
+                player = getcareerstats.get_career_stats(tid, i)
+                players.append(player)
+
+            return render_template('allstats.html', team=team, stats=stats, players=players, tid=tid, seasons=seasons)
 
         else:
             team = Team.query.filter_by(teamid=tid).order_by(Team.season.desc()).all()

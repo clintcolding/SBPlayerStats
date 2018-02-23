@@ -49,7 +49,6 @@
             <thead>    
                 <tr>
                     <th>Player</th>
-                    <th>Season</th>
                     <th>Pos</th>
                     <th>G</th>
                     <th>AB</th>
@@ -66,8 +65,7 @@
             <tbody>
             {% for entry in players %}
                 <tr>
-                    <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
-                    <td>{{ entry.season }}</td>
+                    <td><a href="/stats/{{ tid }}/career/{{ entry.id }}">{{ entry.name }}</a></td>
                     <td>{{ entry.position }}</td>
                     <td>{{ entry.games }}</td>
                     <td>{{ entry.ab }}</td>
@@ -90,7 +88,6 @@
             <thead>
                 <tr>
                     <th>Player</th>
-                    <th>Season</th>
                     <th>G</th>
                     <th>SO</th>
                     <th>SO/G</th>
@@ -98,15 +95,17 @@
                 </tr>
             </thead>
             <tbody>
-            {% for entry in pitchers %}
-            <tr>
-                <td><a href="/stats/{{ entry.teamid }}/career/{{ entry.playerid }}">{{ entry.name }}</a></td>
-                <td>{{ entry.season }}</td>
-                <td>{{ entry.games }}</td>
-                <td>{{ entry.so }}</td>
-                <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
-                <td>{{ entry.era }}</td>
-            </tr>    
+            {% for entry in players %}
+                {% if entry.so == 0 %}
+                {% else %}
+                    <tr>
+                        <td><a href="/stats/{{ tid }}/career/{{ entry.id }}">{{ entry.name }}</a></td>
+                        <td>{{ entry.games }}</td>
+                        <td>{{ entry.so }}</td>
+                        <td>{{ (entry.so / entry.games) | round(1, 'floor') }}</td>
+                        <td>{{ (entry.era / seasons) | round(2, 'floor') }}</td>
+                    </tr>
+                {% endif %}
             {% endfor %}
             </tbody>
         </table>
