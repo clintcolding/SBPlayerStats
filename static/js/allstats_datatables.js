@@ -1,7 +1,7 @@
 $(document).ready(function() {
 // Datatables for hitting
     $('#hitting').DataTable( {
-        "order": [[ 11, "desc"]],
+        "order": [[ 10, "desc"]],
         "paging": false,
         "info": false,
         "searching": false,
@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 // Datatables for pitching
     $('#pitching').DataTable( {
-        "order": [[ 4, "desc"]],
+        "order": [[ 3, "desc"]],
         "paging": false,
         "info": false,
         "searching": false,
