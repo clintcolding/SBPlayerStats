@@ -2,10 +2,9 @@ $(document).ready(function() {
 // Datatables for hitting
     $('#hitting').DataTable( {
         "order": [[ 11, "desc"]],
-        "pageLength": 25,
-        "paging": true,
-        "info": true,
-        "searching": true,
+        "paging": false,
+        "info": false,
+        "searching": false,
         "scrollX": true,
         "aaSorting": []
     } );
@@ -13,10 +12,9 @@ $(document).ready(function() {
 // Datatables for pitching
     $('#pitching').DataTable( {
         "order": [[ 4, "desc"]],
-        "pageLength": 25,
-        "paging": true,
-        "info": true,
-        "searching": true,
+        "paging": false,
+        "info": false,
+        "searching": false,
         "scrollX": true,
         "aaSorting": []
     } );
@@ -25,9 +23,9 @@ $(document).ready(function() {
     $('#team').DataTable( {
         "order": [[ 0, "desc"]],
         "pageLength": 25,
-        "paging": true,
-        "info": true,
-        "searching": true,
+        "paging": false,
+        "info": false,
+        "searching": false,
         "scrollX": true,
         "aaSorting": []
     } );
